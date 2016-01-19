@@ -384,17 +384,20 @@ class GCodeToolpath {
     constructor(options) {
         options = options || {};
 
-        this.modalState = _.extend({},
-            this.modalState,
-            _.pick(options.modalState, _.keys(this.modalState))
-        );
-
+        this.setModalState(options.modalState);
         this.fn = {
             addLine: options.addLine || noop,
             addArcCurve: options.addArcCurve || noop
         };
 
         return new GCodeInterpreter({ handlers: this.handlers });
+    }
+    setModalState(modalState) {
+        this.modalState = _.merge({},
+            this.modalState,
+            _.pick(modalState, _.keys(this.modalState))
+        );
+        return this.modalState;
     }
     isMetricUnits() { // mm
         return this.modalState.units === 'G21';
@@ -427,9 +430,6 @@ class GCodeToolpath {
         this.position.x = _.isNumber(x) ? x : this.position.x;
         this.position.y = _.isNumber(y) ? y : this.position.y;
         this.position.z = _.isNumber(z) ? z : this.position.z;
-    }
-    setModalState(modalState) {
-        _.assign(this.modalState, modalState);
     }
     translateX(x, relative) {
         if (_.isUndefined(relative)) {

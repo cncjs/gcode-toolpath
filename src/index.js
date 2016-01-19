@@ -393,10 +393,8 @@ class GCodeToolpath {
         return new GCodeInterpreter({ handlers: this.handlers });
     }
     setModalState(modalState) {
-        this.modalState = _.merge({},
-            this.modalState,
-            _.pick(modalState, _.keys(this.modalState))
-        );
+        modalState = _.pick(modalState, _.keys(this.modalState))
+        this.modalState = _.merge({}, this.modalState, modalState);
         return this.modalState;
     }
     isMetricUnits() { // mm

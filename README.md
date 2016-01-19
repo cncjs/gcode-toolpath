@@ -10,6 +10,7 @@
 
 ```js
 var GCodeToolpath = require('gcode-toolpath').GCodeToolpath;
+
 var toolpaths = [];
 var gcode = new GCodeToolpath({
     modalState: { // [optional] initial modal state
@@ -56,6 +57,16 @@ Run this example with babel-node:
 import { GCodeToolpath } from 'gcode-toolpath';
 
 let toolpaths = [];
+let gcode = new GCodeToolpath({
+    addLine: (modalState, v1, v2) => {
+        var motion = modalState.motion;
+        toolpaths.push({ motion: motion, v1: v1, v2: v2 });
+    },
+    addArcCurve: (modalState, v1, v2, v0) => {
+        var motion = modalState.motion;
+        toolpaths.push({ motion: motion, v1: v1, v2: v2, v0: v0 });
+    }
+});
 
 const GCODE_TEXT = [
     'N1 G17 G20 G90 G94 G54',
@@ -70,17 +81,6 @@ const GCODE_TEXT = [
     'N10 G01 Z0.1 F5.',
     'N11 G00 X0. Y0. Z0.25'
 ].join('\n');
-
-const gcode = new GCodeToolpath({
-    addLine: (modalState, v1, v2) => {
-        var motion = modalState.motion;
-        toolpaths.push({ motion: motion, v1: v1, v2: v2 });
-    },
-    addArcCurve: (modalState, v1, v2, v0) => {
-        var motion = modalState.motion;
-        toolpaths.push({ motion: motion, v1: v1, v2: v2, v0: v0 });
-    }
-});
 
 gcode.interpretText(GCODE_TEXT, (err, results) => {
     console.log(toolpaths);

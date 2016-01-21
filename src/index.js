@@ -28,7 +28,7 @@ class GCodeToolpath {
     modalState = {
         motion: 'G0', // G0, G1, G2, G3, G38.2, G38.3, G38.4, G38.5, G80
         coordinate: 'G54', // G54, G55, G56, G57, G58, G59
-        plane: 'G17', // G17: xy-plane, G18: xz-plane, G19: yz-plane
+        plane: 'G17', // G17: XY-plane, G18: ZX-plane, G19: YZ-plane
         units: 'G21', // G20: Inches, G21: Millimeters
         distance: 'G90', // G90: Absolute, G91: Relative
         feedrate: 'G94', // G93: Inverse Time Mode, G94: Units Per Minutes
@@ -132,15 +132,15 @@ class GCodeToolpath {
             const isClockwise = true;
             const targetPosition = { x: v2.x, y: v2.y, z: v2.z };
 
-            if (this.isXYPlane()) { // xy-plane
+            if (this.isXYPlane()) { // XY-plane
                 [ v1.x, v1.y, v1.z ] = [ v1.x, v1.y, v1.z ];
                 [ v2.x, v2.y, v2.z ] = [ v2.x, v2.y, v2.z ];
                 [ v0.x, v0.y, v0.z ] = [ v0.x, v0.y, v0.z ];
-            } else if (this.isXZPlane()) { // xz-plane
-                [ v1.x, v1.y, v1.z ] = [ v1.x, v1.z, v1.y ];
-                [ v2.x, v2.y, v2.z ] = [ v2.x, v2.z, v2.y ];
-                [ v0.x, v0.y, v0.z ] = [ v0.x, v0.z, v0.y ];
-            } else if (this.isYZPlane()) { // yz-plane
+            } else if (this.isZXPlane()) { // ZX-plane
+                [ v1.x, v1.y, v1.z ] = [ v1.z, v1.x, v1.y ];
+                [ v2.x, v2.y, v2.z ] = [ v2.z, v2.x, v2.y ];
+                [ v0.x, v0.y, v0.z ] = [ v0.z, v0.x, v0.y ];
+            } else if (this.isYZPlane()) { // YZ-plane
                 [ v1.x, v1.y, v1.z ] = [ v1.y, v1.z, v1.x ];
                 [ v2.x, v2.y, v2.z ] = [ v2.y, v2.z, v2.x ];
                 [ v0.x, v0.y, v0.z ] = [ v0.y, v0.z, v0.x ];
@@ -150,7 +150,7 @@ class GCodeToolpath {
             }
 
             if (params.R) {
-                let radius = this.translateR(params.R);
+                let radius = this.translateR(Number(params.R) || 0);
                 let x = v2.x - v1.x;
                 let y = v2.y - v1.y;
                 let distance = Math.sqrt(x * x + y * y);
@@ -196,15 +196,15 @@ class GCodeToolpath {
             const isClockwise = false;
             const targetPosition = { x: v2.x, y: v2.y, z: v2.z };
 
-            if (this.isXYPlane()) { // xy-plane
+            if (this.isXYPlane()) { // XY-plane
                 [ v1.x, v1.y, v1.z ] = [ v1.x, v1.y, v1.z ];
                 [ v2.x, v2.y, v2.z ] = [ v2.x, v2.y, v2.z ];
                 [ v0.x, v0.y, v0.z ] = [ v0.x, v0.y, v0.z ];
-            } else if (this.isXZPlane()) { // xz-plane
-                [ v1.x, v1.y, v1.z ] = [ v1.x, v1.z, v1.y ];
-                [ v2.x, v2.y, v2.z ] = [ v2.x, v2.z, v2.y ];
-                [ v0.x, v0.y, v0.z ] = [ v0.x, v0.z, v0.y ];
-            } else if (this.isYZPlane()) { // yz-plane
+            } else if (this.isZXPlane()) { // ZX-plane
+                [ v1.x, v1.y, v1.z ] = [ v1.z, v1.x, v1.y ];
+                [ v2.x, v2.y, v2.z ] = [ v2.z, v2.x, v2.y ];
+                [ v0.x, v0.y, v0.z ] = [ v0.z, v0.x, v0.y ];
+            } else if (this.isYZPlane()) { // YZ-plane
                 [ v1.x, v1.y, v1.z ] = [ v1.y, v1.z, v1.x ];
                 [ v2.x, v2.y, v2.z ] = [ v2.y, v2.z, v2.x ];
                 [ v0.x, v0.y, v0.z ] = [ v0.y, v0.z, v0.x ];
@@ -412,7 +412,7 @@ class GCodeToolpath {
     isXYPlane() {
         return this.modalState.plane === 'G17';
     }
-    isXZPlane() {
+    isZXPlane() {
         return this.modalState.plane === 'G18';
     }
     isYZPlane() {

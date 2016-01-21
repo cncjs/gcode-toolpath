@@ -283,7 +283,7 @@ describe('G-code Toolpath', (done) => {
             });
         });
 
-        it('should generate correct tool paths in the XZ-plane (G18)', (done) => {
+        it('should generate correct tool paths in the ZX-plane (G18)', (done) => {
             const expectedToolpaths = [
                 {
                     motion: 'G1',
@@ -292,8 +292,8 @@ describe('G-code Toolpath', (done) => {
                 },
                 {
                     motion: 'G2',
-                    v1: { x: 0, y: 20, z: 0 },
-                    v2: { x: 20, y: 0, z: 0 },
+                    v1: { x: 20, y: 0, z: 0 },
+                    v2: { x: 0, y: 20, z: 0 },
                     v0: { x: 0, y: 0, z: 0 }
                 },
                 {
@@ -303,8 +303,8 @@ describe('G-code Toolpath', (done) => {
                 },
                 {
                     motion: 'G3',
-                    v1: { x: 0, y: 20, z: 0 },
-                    v2: { x: 20, y: 0, z: 0 },
+                    v1: { x: 20, y: 0, z: 0 },
+                    v2: { x: 0, y: 20, z: 0 },
                     v0: { x: 0, y: 0, z: 0 }
                 }
             ];
@@ -327,7 +327,7 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.interpretFile('test/fixtures/arc-xz-plane.nc', (err, results) => {
+            gcodeToolpath.interpretFile('test/fixtures/arc-zx-plane.nc', (err, results) => {
                 expect(toolpaths).to.deep.equal(expectedToolpaths);
                 done();
             });

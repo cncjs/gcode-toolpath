@@ -248,11 +248,11 @@ class GCodeToolpath {
         'G4': (params) => {
             let sleep = 0;
             
-            if (typeof params.S !== 'undefined') {
+            if (params.S !== undefined) {
                 sleep = Number(params.S) * 1000; // seconds
             }
 
-            if (typeof params.P !== 'undefined') {
+            if (params.P !== undefined) {
                 sleep = Number(params.P); // milliseconds
             }
         },
@@ -353,7 +353,7 @@ class GCodeToolpath {
             };
 
             // A G92 without coordinates will reset all axes to zero.
-            if (_.isUndefined(params.X) && _.isUndefined(params.Y) && _.isUndefined(params.Z)) {
+            if ((params.X === undefined) && (params.Y === undefined) && (params.Z === undefined)) {
                 v2.x = v2.y = v2.z = 0;
             }
      
@@ -430,24 +430,30 @@ class GCodeToolpath {
         this.position.z = _.isNumber(z) ? z : this.position.z;
     }
     translateX(x, relative) {
-        if (_.isUndefined(relative)) {
+        if (x !== undefined) {
+            x = this.isImperialUnits() ? in2mm(x) : x;
+        }
+        if (relative === undefined) {
             relative = this.isRelativeDistance();
         }
-        x = this.isImperialUnits() ? in2mm(x) : x;
         return translatePosition(this.position.x, x, !!relative);
     }
     translateY(y, relative) {
-        if (_.isUndefined(relative)) {
+        if (y !== undefined) {
+            y = this.isImperialUnits() ? in2mm(y) : y;
+        }
+        if (relative === undefined) {
             relative = this.isRelativeDistance();
         }
-        y = this.isImperialUnits() ? in2mm(y) : y;
         return translatePosition(this.position.y, y, !!relative);
     }
     translateZ(z, relative) {
-        if (_.isUndefined(relative)) {
+        if (z !== undefined) {
+            z = this.isImperialUnits() ? in2mm(z) : z;
+        }
+        if (relative === undefined) {
             relative = this.isRelativeDistance();
         }
-        z = this.isImperialUnits() ? in2mm(z) : z;
         return translatePosition(this.position.z, z, !!relative);
     }
     translateI(i) {

@@ -47,9 +47,98 @@ describe('G-code Toolpath', (done) => {
         });
     });
 
-    describe('Arc Curve: G02/G03', (done) => {
+    describe('Linear Move: G0/G1', (done) => {
+        it('should generate tool paths for linear movement.', (done) => {
+            const expectedToolpaths = [
+                {
+                    "motion": "G0",
+                    "v1": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "v2": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                {
+                    "motion": "G0",
+                    "v1": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "v2": {
+                        "x": 28.4099,
+                        "y": 14.12748,
+                        "z": 0
+                    }
+                },
+                {
+                    "motion": "G0",
+                        "v1": {
+                            "x": 28.4099,
+                            "y": 14.12748,
+                            "z": 0
+                        },
+                        "v2": {
+                            "x": 28.4099,
+                            "y": 14.12748,
+                            "z": 1.0007599999999999
+                        }
+                },
+                {
+                    "motion": "G0",
+                    "v1": {
+                        "x": 28.4099,
+                        "y": 14.12748,
+                        "z": 1.0007599999999999
+                    },
+                    "v2": {
+                        "x": 28.4099,
+                        "y": 14.12748,
+                        "z": -0.5867399999999999
+                    }
+                },
+                {
+                    "motion": "G1",
+                    "v1": {
+                        "x": 28.4099,
+                        "y": 14.12748,
+                        "z": -0.5867399999999999
+                    },
+                    "v2": {
+                        "x": 28.4099,
+                        "y": 14.12748,
+                        "z": -0.9270999999999999
+                    }
+                }
+            ];
+            let toolpaths = [];
+            let gcodeToolpath = new GCodeToolpath({
+                modalState: {},
+                addLine: (modalState, v1, v2) => {
+                    toolpaths.push({
+                        motion: modalState.motion,
+                        v1: v1,
+                        v2: v2
+                    });
+                }
+            });
 
-        it('Simple Radius', (done) => {
+            gcodeToolpath.interpretFile('test/fixtures/linear.nc', (err, results) => {
+                expect(toolpaths).to.deep.equal(expectedToolpaths);
+                done();
+            });
+        });
+
+    });
+
+    describe('Arc Curve: G2/G3', (done) => {
+
+        it('should generate tool paths for simple radius.', (done) => {
             let toolpaths = [];
             let gcodeToolpath = new GCodeToolpath({
                 modalState: {},
@@ -76,7 +165,7 @@ describe('G-code Toolpath', (done) => {
             });
         });
 
-        it('Helical Thread Milling', (done) => {
+        it('should generate tool paths for helical thread milling.', (done) => {
             let toolpaths = [];
             let gcodeToolpath = new GCodeToolpath({
                 modalState: {},
@@ -103,7 +192,7 @@ describe('G-code Toolpath', (done) => {
             });
         });
 
-        it('One inch circle', (done) => {
+        it('should generate for one inch circle.', (done) => {
             let toolpaths = [];
             let gcodeToolpath = new GCodeToolpath({
                 modalState: {},

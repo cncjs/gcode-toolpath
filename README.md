@@ -44,9 +44,9 @@ var stream = fs.createReadStream(file, { encoding: 'utf8' });
 gcode.interpretStream(stream, function(err, data) {
 });
 
-// Interpret G-code from text string
-var text = fs.readFileSync(file, 'utf8');
-gcode.interpretText(text, function(err, data) {
+// Interpret G-code from string
+var str = fs.readFileSync(file, 'utf8');
+gcode.interpretString(str, function(err, data) {
 });
 ```
 

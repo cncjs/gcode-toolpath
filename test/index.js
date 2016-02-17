@@ -29,17 +29,24 @@ describe('G-code Toolpath', (done) => {
         });
     });
 
-    describe('Event callbacks', (done) => {
-        let gcodeToolpath = new GCodeToolpath();
-        gcodeToolpath
-            .on('data', (data) => {
-                expect(data).to.be.an('object');
-            })
-            .on('end', (results) => {
-                expect(results).to.be.an('array');
-            });
+    describe('Event listeners', (done) => {
+        it('should call event listeners.', (done) => {
+            let index = 0;
+            const gcodeToolpath = new GCodeToolpath();
 
-        it('should call event callbacks.', (done) => {
+            gcodeToolpath
+                .on('data', (data) => {
+                    expect(data).to.be.an('object');
+                })
+                .on('progreess', ({ current, total }) => {
+                    expect(current).to.be.equal(index);
+                    expect(total).to.be.equal(7);
+                    ++index;
+                })
+                .on('end', (results) => {
+                    expect(results).to.be.an('array');
+                });
+
             gcodeToolpath.interpretFile('test/fixtures/circle.nc', (err, results) => {
                 expect(err).to.be.okay;
                 done();

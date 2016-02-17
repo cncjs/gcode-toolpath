@@ -9,8 +9,8 @@ const should = chai.should();
 describe('G-code Toolpath', (done) => {
     describe('Pass a null value as the first argument', (done) => {
         let gcodeToolpath = new GCodeToolpath();
-        it('should call interpretText\'s callback.', (done) => {
-            gcodeToolpath.interpretText(null, (err, results) => {
+        it('should call interpretString\'s callback.', (done) => {
+            gcodeToolpath.interpretString(null, (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });

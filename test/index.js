@@ -9,20 +9,20 @@ const should = chai.should();
 describe('G-code Toolpath', (done) => {
     describe('Pass a null value as the first argument', (done) => {
         let gcodeToolpath = new GCodeToolpath();
-        it('should call interpretString\'s callback.', (done) => {
-            gcodeToolpath.interpretString(null, (err, results) => {
+        it('should call loadFromString\'s callback.', (done) => {
+            gcodeToolpath.loadFromString(null, (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
         });
-        it('should call interpretFile\'s callback.', (done) => {
-            gcodeToolpath.interpretFile(null, (err, results) => {
+        it('should call loadFromFile\'s callback.', (done) => {
+            gcodeToolpath.loadFromFile(null, (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
         });
-        it('should call interpretStream\'s callback.', (done) => {
-            gcodeToolpath.interpretStream(null, (err, results) => {
+        it('should call loadFromStream\'s callback.', (done) => {
+            gcodeToolpath.loadFromStream(null, (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
@@ -47,7 +47,7 @@ describe('G-code Toolpath', (done) => {
                     expect(results).to.be.an('array');
                 });
 
-            gcodeToolpath.interpretFile('test/fixtures/circle.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/circle.nc', (err, results) => {
                 expect(err).to.be.okay;
                 done();
             });
@@ -135,7 +135,7 @@ describe('G-code Toolpath', (done) => {
                 }
             });
 
-            gcodeToolpath.interpretFile('test/fixtures/linear.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/linear.nc', (err, results) => {
                 expect(toolpaths).to.deep.equal(expectedToolpaths);
                 done();
             });
@@ -166,7 +166,7 @@ describe('G-code Toolpath', (done) => {
                 }
             });
 
-            gcodeToolpath.interpretFile('test/fixtures/arc-r.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/arc-r.nc', (err, results) => {
                 // TODO: Add test case
                 done();
             });
@@ -193,7 +193,7 @@ describe('G-code Toolpath', (done) => {
                 }
             });
 
-            gcodeToolpath.interpretFile('test/fixtures/helical-thread-milling.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/helical-thread-milling.nc', (err, results) => {
                 // TODO: Add test case
                 done();
             });
@@ -220,7 +220,7 @@ describe('G-code Toolpath', (done) => {
                 }
             });
 
-            gcodeToolpath.interpretFile('test/fixtures/one-inch-circle.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/one-inch-circle.nc', (err, results) => {
                 // TODO: Add test case
                 done();
             });
@@ -248,7 +248,7 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.interpretFile('test/fixtures/dwell.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/dwell.nc', (err, results) => {
                 expect(toolpaths).to.be.empty;
                 done();
             });
@@ -299,7 +299,7 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.interpretFile('test/fixtures/motion.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/motion.nc', (err, results) => {
                 expect(toolpaths).to.deep.equal(expectedToolpaths);
                 done();
             });
@@ -323,7 +323,7 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.interpretFile('test/fixtures/arc-no-plane.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/arc-no-plane.nc', (err, results) => {
                 expect(toolpaths).to.be.empty;
                 done();
             });
@@ -373,7 +373,7 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.interpretFile('test/fixtures/arc-xy-plane.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/arc-xy-plane.nc', (err, results) => {
                 expect(toolpaths).to.deep.equal(expectedToolpaths);
                 done();
             });
@@ -423,7 +423,7 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.interpretFile('test/fixtures/arc-zx-plane.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/arc-zx-plane.nc', (err, results) => {
                 expect(toolpaths).to.deep.equal(expectedToolpaths);
                 done();
             });
@@ -473,7 +473,7 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.interpretFile('test/fixtures/arc-yz-plane.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/arc-yz-plane.nc', (err, results) => {
                 expect(toolpaths).to.deep.equal(expectedToolpaths);
                 done();
             });
@@ -501,7 +501,7 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.interpretFile('test/fixtures/units.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/units.nc', (err, results) => {
                 expect(toolpaths).to.be.empty;
                 done();
             });
@@ -528,7 +528,7 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.interpretFile('test/fixtures/coordinate.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/coordinate.nc', (err, results) => {
                 expect(toolpaths).to.be.empty;
                 done();
             });
@@ -555,7 +555,7 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.interpretFile('test/fixtures/feedrate.nc', (err, results) => {
+            gcodeToolpath.loadFromFile('test/fixtures/feedrate.nc', (err, results) => {
                 expect(toolpaths).to.be.empty;
                 done();
             });

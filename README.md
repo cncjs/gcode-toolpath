@@ -68,7 +68,7 @@ let gcode = new GCodeToolpath({
     }
 });
 
-const GCODE_TEXT = [
+const GCODE = [
     'N1 G17 G20 G90 G94 G54',
     'N2 G0 Z0.25',
     'N3 X-0.5 Y0.',
@@ -82,7 +82,7 @@ const GCODE_TEXT = [
     'N11 G00 X0. Y0. Z0.25'
 ].join('\n');
 
-gcode.interpretText(GCODE_TEXT, (err, results) => {
+gcode.interpretString(GCODE, (err, results) => {
     console.log(toolpaths);
 });
 ```

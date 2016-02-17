@@ -34,19 +34,19 @@ var gcode = new GCodeToolpath({
     }
 });
 
-// Interpret G-code from file
+// Load G-code from file
 var file = 'example.nc';
-gcode.interpretFile(file, function(err, data) {
+gcode.loadFromFile(file, function(err, data) {
 });
 
-// Interpret G-code from stream
+// Load G-code from stream
 var stream = fs.createReadStream(file, { encoding: 'utf8' });
-gcode.interpretStream(stream, function(err, data) {
+gcode.loadFromStream(stream, function(err, data) {
 });
 
-// Interpret G-code from string
+// Load G-code from string
 var str = fs.readFileSync(file, 'utf8');
-gcode.interpretString(str, function(err, data) {
+gcode.loadFromString(str, function(err, data) {
 });
 ```
 
@@ -82,7 +82,7 @@ const GCODE = [
     'N11 G00 X0. Y0. Z0.25'
 ].join('\n');
 
-gcode.interpretString(GCODE, (err, results) => {
+gcode.loadFromString(GCODE, (err, results) => {
     console.log(toolpaths);
 });
 ```

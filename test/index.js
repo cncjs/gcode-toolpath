@@ -11,46 +11,74 @@ describe('G-code Toolpath', (done) => {
         let gcodeToolpath = new GCodeToolpath();
         it('should call loadFromString\'s callback.', (done) => {
             gcodeToolpath.loadFromString(null, (err, results) => {
-                expect(err).to.be.okay;
+                expect(err).to.be.equal(null);
                 done();
             });
         });
         it('should call loadFromFile\'s callback.', (done) => {
             gcodeToolpath.loadFromFile(null, (err, results) => {
-                expect(err).to.be.okay;
+                expect(err).not.to.equal(null);
                 done();
             });
         });
         it('should call loadFromStream\'s callback.', (done) => {
             gcodeToolpath.loadFromStream(null, (err, results) => {
-                expect(err).to.be.okay;
+                expect(err).not.to.equal(null);
                 done();
             });
         });
     });
 
     describe('Event listeners', (done) => {
-        it('should call event listeners.', (done) => {
-            let index = 0;
-            const gcodeToolpath = new GCodeToolpath();
+        it('should call event listeners when loading G-code from file.', (done) => {
+            const file = 'test/fixtures/circle.nc';
 
-            gcodeToolpath
+            new GCodeToolpath()
+                .loadFromFile(file, (err, results) => {
+                    expect(err).to.be.okay;
+                    done();
+                })
                 .on('data', (data) => {
                     expect(data).to.be.an('object');
                 })
-                .on('progreess', ({ current, total }) => {
-                    expect(current).to.be.equal(index);
-                    expect(total).to.be.equal(7);
-                    ++index;
+                .on('end', (results) => {
+                    expect(results).to.be.an('array');
+                    expect(results.length).to.be.equal(7);
+                });
+        });
+
+        it('should call event listeners when loading G-code from stream.', (done) => {
+            const stream = fs.createReadStream('test/fixtures/circle.nc');
+
+            new GCodeToolpath()
+                .loadFromStream(stream, (err, results) => {
+                    expect(err).to.be.okay;
+                    done();
+                })
+                .on('data', (data) => {
+                    expect(data).to.be.an('object');
                 })
                 .on('end', (results) => {
                     expect(results).to.be.an('array');
+                    expect(results.length).to.be.equal(7);
                 });
+        });
 
-            gcodeToolpath.loadFromFile('test/fixtures/circle.nc', (err, results) => {
-                expect(err).to.be.okay;
-                done();
-            });
+        it('should call event listeners when loading G-code from string.', (done) => {
+            const string = fs.readFileSync('test/fixtures/circle.nc', 'utf8');
+
+            new GCodeToolpath()
+                .loadFromString(string, (err, results) => {
+                    expect(err).to.be.okay;
+                    done();
+                })
+                .on('data', (data) => {
+                    expect(data).to.be.an('object');
+                })
+                .on('end', (results) => {
+                    expect(results).to.be.an('array');
+                    expect(results.length).to.be.equal(7);
+                });
         });
     });
 

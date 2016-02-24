@@ -26,7 +26,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "gcode-interpreter": "^0.8.1",
+    "gcode-interpreter": "^0.9.0",
     "lodash": "^4.0.0"
   },
   "devDependencies": {

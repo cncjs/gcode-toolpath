@@ -56,18 +56,6 @@ Run this example with babel-node:
 ```js
 import { GCodeToolpath } from 'gcode-toolpath';
 
-let toolpaths = [];
-let gcode = new GCodeToolpath({
-    addLine: (modalState, v1, v2) => {
-        var motion = modalState.motion;
-        toolpaths.push({ motion: motion, v1: v1, v2: v2 });
-    },
-    addArcCurve: (modalState, v1, v2, v0) => {
-        var motion = modalState.motion;
-        toolpaths.push({ motion: motion, v1: v1, v2: v2, v0: v0 });
-    }
-});
-
 const GCODE = [
     'N1 G17 G20 G90 G94 G54',
     'N2 G0 Z0.25',
@@ -82,9 +70,28 @@ const GCODE = [
     'N11 G00 X0. Y0. Z0.25'
 ].join('\n');
 
-gcode.loadFromString(GCODE, (err, results) => {
-    console.log(toolpaths);
+let toolpaths = [];
+let gcode = new GCodeToolpath({
+    addLine: (modalState, v1, v2) => {
+        var motion = modalState.motion;
+        toolpaths.push({ motion: motion, v1: v1, v2: v2 });
+    },
+    addArcCurve: (modalState, v1, v2, v0) => {
+        var motion = modalState.motion;
+        toolpaths.push({ motion: motion, v1: v1, v2: v2, v0: v0 });
+    }
 });
+
+gcode
+    .loadFromString(GCODE, (err, results) => {
+        console.log(toolpaths);
+    })
+    .on('data', (data) => {
+        // 'data' event listener
+    })
+    .on('end', (results) => {
+        // 'end' event listener
+    });
 ```
 
 and you will see the output as below:

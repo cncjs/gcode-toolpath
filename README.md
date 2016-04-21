@@ -131,3 +131,6 @@ and you will see the output as below:
     v1: { x: 0, y: 0, z: 2.54 },
     v2: { x: 0, y: 0, z: 6.35 } } ]
 ```
+
+## G-code Toolpath Visualizer
+Check out the source code at https://github.com/cheton/cnc/blob/master/src/web/components/widgets/visualizer/GCodeVisualizer.js

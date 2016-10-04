@@ -133,4 +133,4 @@ and you will see the output as below:
 ```
 
 ## G-code Toolpath Visualizer
-Check out the source code at https://github.com/cheton/cnc/blob/master/src/web/components/widgets/visualizer/GCodeVisualizer.js
+Check out the source code at https://github.com/cheton/cnc/blob/master/src/web/widgets/Visualizer/GCodeVisualizer.js

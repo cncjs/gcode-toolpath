@@ -1,35 +1,34 @@
 import chai from 'chai';
 import fs from 'fs';
 import { GCodeToolpath } from '../lib/';
-import _ from 'lodash';
 
 const expect = chai.expect;
 const should = chai.should();
 
-describe('G-code Toolpath', (done) => {
-    describe('Pass a null value as the first argument', (done) => {
-        let gcodeToolpath = new GCodeToolpath();
+describe('G-code Toolpath', () => {
+    describe('Pass a null value as the first argument', () => {
+        const toolpath = new GCodeToolpath();
         it('should call loadFromString\'s callback.', (done) => {
-            gcodeToolpath.loadFromString(null, (err, results) => {
+            toolpath.loadFromString(null, (err, results) => {
                 expect(err).to.be.equal(null);
                 done();
             });
         });
         it('should call loadFromFile\'s callback.', (done) => {
-            gcodeToolpath.loadFromFile(null, (err, results) => {
+            toolpath.loadFromFile(null, (err, results) => {
                 expect(err).not.to.equal(null);
                 done();
             });
         });
         it('should call loadFromStream\'s callback.', (done) => {
-            gcodeToolpath.loadFromStream(null, (err, results) => {
+            toolpath.loadFromStream(null, (err, results) => {
                 expect(err).not.to.equal(null);
                 done();
             });
         });
     });
 
-    describe('Event listeners', (done) => {
+    describe('Event listeners', () => {
         it('should call event listeners when loading G-code from file.', (done) => {
             const file = 'test/fixtures/circle.nc';
 
@@ -82,9 +81,9 @@ describe('G-code Toolpath', (done) => {
         });
     });
 
-    describe('Linear Move: G0/G1', (done) => {
+    describe('Linear Move: G0/G1', () => {
         it('should generate tool paths for linear movement.', (done) => {
-            const expectedToolpaths = [
+            const expectedMotions = [
                 {
                     "motion": "G0",
                     "v1": {
@@ -151,11 +150,11 @@ describe('G-code Toolpath', (done) => {
                     }
                 }
             ];
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 modalState: {},
                 addLine: (modalState, v1, v2) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2
@@ -163,29 +162,28 @@ describe('G-code Toolpath', (done) => {
                 }
             });
 
-            gcodeToolpath.loadFromFile('test/fixtures/linear.nc', (err, results) => {
-                expect(toolpaths).to.deep.equal(expectedToolpaths);
+            toolpath.loadFromFile('test/fixtures/linear.nc', (err, results) => {
+                expect(motions).to.deep.equal(expectedMotions);
                 done();
             });
         });
 
     });
 
-    describe('Arc Curve: G2/G3', (done) => {
-
+    describe('Arc Curve: G2/G3', () => {
         it('should generate tool paths for simple radius.', (done) => {
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 modalState: {},
                 addLine: (modalState, v1, v2) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
                 addArcCurve: (modalState, v1, v2, v0) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2,
@@ -194,25 +192,25 @@ describe('G-code Toolpath', (done) => {
                 }
             });
 
-            gcodeToolpath.loadFromFile('test/fixtures/arc-r.nc', (err, results) => {
+            toolpath.loadFromFile('test/fixtures/arc-r.nc', (err, results) => {
                 // TODO: Add test case
                 done();
             });
         });
 
         it('should generate tool paths for helical thread milling.', (done) => {
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 modalState: {},
                 addLine: (modalState, v1, v2) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
                 addArcCurve: (modalState, v1, v2, v0) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2,
@@ -221,25 +219,25 @@ describe('G-code Toolpath', (done) => {
                 }
             });
 
-            gcodeToolpath.loadFromFile('test/fixtures/helical-thread-milling.nc', (err, results) => {
+            toolpath.loadFromFile('test/fixtures/helical-thread-milling.nc', (err, results) => {
                 // TODO: Add test case
                 done();
             });
         });
 
         it('should generate for one inch circle.', (done) => {
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 modalState: {},
                 addLine: (modalState, v1, v2) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
                 addArcCurve: (modalState, v1, v2, v0) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2,
@@ -248,7 +246,7 @@ describe('G-code Toolpath', (done) => {
                 }
             });
 
-            gcodeToolpath.loadFromFile('test/fixtures/one-inch-circle.nc', (err, results) => {
+            toolpath.loadFromFile('test/fixtures/one-inch-circle.nc', (err, results) => {
                 // TODO: Add test case
                 done();
             });
@@ -256,19 +254,19 @@ describe('G-code Toolpath', (done) => {
 
     });
 
-    describe('Dwell: G4', (done) => {
+    describe('Dwell: G4', () => {
         it('should not generate tool paths.', (done) => {
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 addLine: (modalState, v1, v2) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
                 addArcCurve: (modalState, v1, v2, v0) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2,
@@ -276,16 +274,16 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.loadFromFile('test/fixtures/dwell.nc', (err, results) => {
-                expect(toolpaths).to.be.empty;
+            toolpath.loadFromFile('test/fixtures/dwell.nc', (err, results) => {
+                expect(motions).to.be.empty;
                 done();
             });
         });
     });
 
-    describe('Motion: G0/G1/G2/G3/G38.2/G38.3/G38.4/G38.5/G80', (done) => {
+    describe('Motion: G0/G1/G2/G3/G38.2/G38.3/G38.4/G38.5/G80', () => {
         it('should generate tool paths for an empty object.', (done) => {
-            const expectedToolpaths = [
+            const expectedmotions = [
                 {
                     motion: 'G0',
                     v1: { x: 0, y: 0, z: 0 },
@@ -309,17 +307,17 @@ describe('G-code Toolpath', (done) => {
                     v0: { x: 0, y: 0, z: 0 }
                 }
             ];
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 addLine: (modalState, v1, v2) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
                 addArcCurve: (modalState, v1, v2, v0) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2,
@@ -327,23 +325,22 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.loadFromFile('test/fixtures/motion.nc', (err, results) => {
-                expect(toolpaths).to.deep.equal(expectedToolpaths);
+            toolpath.loadFromFile('test/fixtures/motion.nc', (err, results) => {
+                expect(motions).to.deep.equal(expectedmotions);
                 done();
             });
         });
     });
 
-    describe('Plane: G17/G18/G19', (done) => {
-
+    describe('Plane: G17/G18/G19', () => {
         it('should not generate tool paths with wrong plane mode.', (done) => {
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 modalState: {
                     plane: 'xx' // The plane is invalid
                 },
                 addArcCurve: (modalState, v1, v2, v0) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2,
@@ -351,14 +348,14 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.loadFromFile('test/fixtures/arc-no-plane.nc', (err, results) => {
-                expect(toolpaths).to.be.empty;
+            toolpath.loadFromFile('test/fixtures/arc-no-plane.nc', (err, results) => {
+                expect(motions).to.be.empty;
                 done();
             });
         });
 
         it('should generate correct tool paths in the XY-plane (G17)', (done) => {
-            const expectedToolpaths = [
+            const expectedmotions = [
                 {
                     motion: 'G1',
                     v1: { x: 0, y: 0, z: 0 },
@@ -382,18 +379,18 @@ describe('G-code Toolpath', (done) => {
                     v0: { x: 0, y: 0, z: 0 }
                 }
             ];
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 modalState: {},
                 addLine: (modalState, v1, v2) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
                 addArcCurve: (modalState, v1, v2, v0) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2,
@@ -401,14 +398,14 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.loadFromFile('test/fixtures/arc-xy-plane.nc', (err, results) => {
-                expect(toolpaths).to.deep.equal(expectedToolpaths);
+            toolpath.loadFromFile('test/fixtures/arc-xy-plane.nc', (err, results) => {
+                expect(motions).to.deep.equal(expectedmotions);
                 done();
             });
         });
 
         it('should generate correct tool paths in the ZX-plane (G18)', (done) => {
-            const expectedToolpaths = [
+            const expectedmotions = [
                 {
                     motion: 'G1',
                     v1: { x: 0, y: 0, z: 0 },
@@ -432,18 +429,18 @@ describe('G-code Toolpath', (done) => {
                     v0: { x: 0, y: 0, z: 0 }
                 }
             ];
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 modalState: {},
                 addLine: (modalState, v1, v2) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
                 addArcCurve: (modalState, v1, v2, v0) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2,
@@ -451,14 +448,14 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.loadFromFile('test/fixtures/arc-zx-plane.nc', (err, results) => {
-                expect(toolpaths).to.deep.equal(expectedToolpaths);
+            toolpath.loadFromFile('test/fixtures/arc-zx-plane.nc', (err, results) => {
+                expect(motions).to.deep.equal(expectedmotions);
                 done();
             });
         });
 
         it('should generate correct tool paths in the YZ-plane (G19)', (done) => {
-            const expectedToolpaths = [
+            const expectedmotions = [
                 {
                     motion: 'G1',
                     v1: { x: 0, y: 0, z: 0 },
@@ -482,18 +479,18 @@ describe('G-code Toolpath', (done) => {
                     v0: { x: 0, y: 0, z: 0 }
                 }
             ];
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 modalState: {},
                 addLine: (modalState, v1, v2) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
                 addArcCurve: (modalState, v1, v2, v0) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2,
@@ -501,27 +498,27 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.loadFromFile('test/fixtures/arc-yz-plane.nc', (err, results) => {
-                expect(toolpaths).to.deep.equal(expectedToolpaths);
+            toolpath.loadFromFile('test/fixtures/arc-yz-plane.nc', (err, results) => {
+                expect(motions).to.deep.equal(expectedmotions);
                 done();
             });
         });
 
     });
 
-    describe('Units: G20/G21', (done) => {
+    describe('Units: G20/G21', () => {
         it('should not generate tool paths.', (done) => {
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 addLine: (modalState, v1, v2) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
                 addArcCurve: (modalState, v1, v2, v0) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2,
@@ -529,26 +526,26 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.loadFromFile('test/fixtures/units.nc', (err, results) => {
-                expect(toolpaths).to.be.empty;
+            toolpath.loadFromFile('test/fixtures/units.nc', (err, results) => {
+                expect(motions).to.be.empty;
                 done();
             });
         });
     });
 
-    describe('Coordinate: G54/G55/G56/G57/G58/G59', (done) => {
+    describe('Coordinate: G54/G55/G56/G57/G58/G59', () => {
         it('should not generate tool paths.', (done) => {
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 addLine: (modalState, v1, v2) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
                 addArcCurve: (modalState, v1, v2, v0) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2,
@@ -556,26 +553,26 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.loadFromFile('test/fixtures/coordinate.nc', (err, results) => {
-                expect(toolpaths).to.be.empty;
+            toolpath.loadFromFile('test/fixtures/coordinate.nc', (err, results) => {
+                expect(motions).to.be.empty;
                 done();
             });
         });
     });
 
-    describe('Feed Rate: G93/G94', (done) => {
+    describe('Feed Rate: G93/G94', () => {
         it('should not generate tool paths.', (done) => {
-            let toolpaths = [];
-            let gcodeToolpath = new GCodeToolpath({
+            const motions = [];
+            const toolpath = new GCodeToolpath({
                 addLine: (modalState, v1, v2) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
                 addArcCurve: (modalState, v1, v2, v0) => {
-                    toolpaths.push({
+                    motions.push({
                         motion: modalState.motion,
                         v1: v1,
                         v2: v2,
@@ -583,8 +580,8 @@ describe('G-code Toolpath', (done) => {
                     });
                 }
             });
-            gcodeToolpath.loadFromFile('test/fixtures/feedrate.nc', (err, results) => {
-                expect(toolpaths).to.be.empty;
+            toolpath.loadFromFile('test/fixtures/feedrate.nc', (err, results) => {
+                expect(motions).to.be.empty;
                 done();
             });
         });

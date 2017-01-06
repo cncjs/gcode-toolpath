@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { GCodeInterpreter } from 'gcode-interpreter';
 
 // from in to mm
@@ -10,7 +9,7 @@ const noop = () => {};
 const translatePosition = (position, newPosition, relative) => {
     relative = !!relative;
     newPosition = Number(newPosition);
-    if (_.isNaN(newPosition)) {
+    if (Number.isNaN(newPosition)) {
         return position;
     }
     return relative ? (position + newPosition) : newPosition;
@@ -40,7 +39,9 @@ class GCodeToolpath {
     handlers = {
         // G0: Rapid Linear Move
         'G0': (params) => {
-            this.setModalState({ 'motion': 'G0' });
+            if (this.modalState.motion !== 'G0') {
+                this.setModalState({ 'motion': 'G0' });
+            }
 
             let v1 = {
                 x: this.position.x,
@@ -74,7 +75,9 @@ class GCodeToolpath {
         //   G1 X90.6 Y13.8 E22.4 (Move to 90.6mm on the X axis and 13.8mm on the Y axis while extruding 22.4mm of material)
         //
         'G1': (params) => {
-            this.setModalState({ 'motion': 'G1' });
+            if (this.modalState.motion !== 'G1') {
+                this.setModalState({ 'motion': 'G1' });
+            }
 
             let v1 = {
                 x: this.position.x,
@@ -112,7 +115,9 @@ class GCodeToolpath {
         //   http://linuxcnc.org/docs/2.5/html/gcode/gcode.html#sec:G2-G3-Arc
         //   https://github.com/grbl/grbl/issues/236
         'G2': (params) => {
-            this.setModalState({ 'motion': 'G2' });
+            if (this.modalState.motion !== 'G2') {
+                this.setModalState({ 'motion': 'G2' });
+            }
 
             let v1 = {
                 x: this.position.x,
@@ -176,7 +181,9 @@ class GCodeToolpath {
             this.setPosition(targetPosition.x, targetPosition.y, targetPosition.z);
         },
         'G3': (params) => {
-            this.setModalState({ 'motion': 'G3' });
+            if (this.modalState.motion !== 'G3') {
+                this.setModalState({ 'motion': 'G3' });
+            }
 
             let v1 = {
                 x: this.position.x,
@@ -262,77 +269,113 @@ class GCodeToolpath {
         // G17..19: Plane Selection
         // G17: XY (default)
         'G17': (params) => {
-            this.setModalState({ 'plane': 'G17' });
+            if (this.modalState.plane !== 'G17') {
+                this.setModalState({ 'plane': 'G17' });
+            }
         },
         // G18: XZ
         'G18': (params) => {
-            this.setModalState({ 'plane': 'G18' });
+            if (this.modalState.plane !== 'G18') {
+                this.setModalState({ 'plane': 'G18' });
+            }
         },
         // G19: YZ
         'G19': (params) => {
-            this.setModalState({ 'plane': 'G19' });
+            if (this.modalState.plane !== 'G19') {
+                this.setModalState({ 'plane': 'G19' });
+            }
         },
         // G20: use inches for length units 
         'G20': (params) => {
-            this.setModalState({ 'units': 'G20' });
+            if (this.modalState.units !== 'G20') {
+                this.setModalState({ 'units': 'G20' });
+            }
         },
         // G21: use millimeters for length units
         'G21': (params) => {
-            this.setModalState({ 'units': 'G21' });
+            if (this.modalState.units !== 'G21') {
+                this.setModalState({ 'units': 'G21' });
+            }
         },
         // G38.x Straight Probe
         // G38.2 probe toward workpiece, stop on contact, signal error if failure
         'G38.2': (params) => {
-            this.setModalState({ 'motion': 'G38.2' });
+            if (this.modalState.motion !== 'G38.2') {
+                this.setModalState({ 'motion': 'G38.2' });
+            }
         },
         // G38.3 probe toward workpiece, stop on contact
         'G38.3': (params) => {
-            this.setModalState({ 'motion': 'G38.3' });
+            if (this.modalState.motion !== 'G38.3') {
+                this.setModalState({ 'motion': 'G38.3' });
+            }
         },
         // G38.4 probe away from workpiece, stop on loss of contact, signal error if failure
         'G38.4': (params) => {
-            this.setModalState({ 'motion': 'G38.4' });
+            if (this.modalState.motion !== 'G38.4') {
+                this.setModalState({ 'motion': 'G38.4' });
+            }
         },
         // G38.5 probe away from workpiece, stop on loss of contact
         'G38.5': (params) => {
-            this.setModalState({ 'motion': 'G38.5' });
+            if (this.modalState.motion !== 'G38.5') {
+                this.setModalState({ 'motion': 'G38.5' });
+            }
         },
         // G54..59: Coordinate System Select
         'G54': () => {
-            this.setModalState({ 'coordinate': 'G54' });
+            if (this.modalState.coordinate !== 'G54') {
+                this.setModalState({ 'coordinate': 'G54' });
+            }
         },
         'G55': () => {
-            this.setModalState({ 'coordinate': 'G55' });
+            if (this.modalState.coordinate !== 'G55') {
+                this.setModalState({ 'coordinate': 'G55' });
+            }
         },
         'G56': () => {
-            this.setModalState({ 'coordinate': 'G56' });
+            if (this.modalState.coordinate !== 'G56') {
+                this.setModalState({ 'coordinate': 'G56' });
+            }
         },
         'G57': () => {
-            this.setModalState({ 'coordinate': 'G57' });
+            if (this.modalState.coordinate !== 'G57') {
+                this.setModalState({ 'coordinate': 'G57' });
+            }
         },
         'G58': () => {
-            this.setModalState({ 'coordinate': 'G58' });
+            if (this.modalState.coordinate !== 'G58') {
+                this.setModalState({ 'coordinate': 'G58' });
+            }
         },
         'G59': () => {
-            this.setModalState({ 'coordinate': 'G59' });
+            if (this.modalState.coordinate !== 'G59') {
+                this.setModalState({ 'coordinate': 'G59' });
+            }
         },
         // G80: Cancel Canned Cycle
         'G80': () => {
-            this.setModalState({ 'motion': 'G80' });
+            if (this.modalState.motion !== 'G80') {
+                this.setModalState({ 'motion': 'G80' });
+            }
         },
         // G90: Set to Absolute Positioning
         // Example
         //   G90
         // All coordinates from now on are absolute relative to the origin of the machine.
         'G90': () => {
-            this.setModalState({ 'distance': 'G90' });
+            if (this.modalState.distance !== 'G90') {
+                this.setModalState({ 'distance': 'G90' });
+            }
         },
         // G91: Set to Relative Positioning
         // Example
         //   G91
         // All coordinates from now on are relative to the last position.
         'G91': () => {
-            this.setModalState({ 'distance': 'G91' });
+            if (this.modalState.distance !== 'G91') {
+                this.setModalState({ 'distance': 'G91' });
+            }
         },
         // G92: Set Position
         // Parameters
@@ -365,7 +408,9 @@ class GCodeToolpath {
         // [one divided by the F number] minutes.
         // For example, if the F number is 2.0, the move should be completed in half a minute.
         'G93': () => {
-            this.setModalState({ 'feedrate': 'G93' });
+            if (this.modalState.feedrate !== 'G93') {
+                this.setModalState({ 'feedrate': 'G93' });
+            }
         },
         // G94: start the units per minute mode
         // In units per minute feed rate mode, an F word on the line is interpreted to
@@ -373,7 +418,9 @@ class GCodeToolpath {
         // millimeters per minute or degrees per minute, depending upon what length units
         // are being used and which axis or axes are moving.
         'G94': () => {
-            this.setModalState({ 'feedrate': 'G94' });
+            if (this.modalState.feedrate !== 'G94') {
+                this.setModalState({ 'feedrate': 'G94' });
+            }
         }
     };
 
@@ -382,19 +429,25 @@ class GCodeToolpath {
     // @param {function} [options.addLine]
     // @param {function} [options.addArcCurve]
     constructor(options) {
-        options = options || {};
-
-        this.setModalState(options.modalState);
-        this.fn = {
-            addLine: options.addLine || noop,
-            addArcCurve: options.addArcCurve || noop
-        };
+        const { modalState, addLine = noop, addArcCurve = noop } = { ...options };
+        const nextModalState = {};
+        Object.keys({ ...modalState }).forEach(key => {
+            if (!this.modalState.hasOwnProperty(key)) {
+                return;
+            }
+            nextModalState[key] = modalState[key];
+        });
+        this.setModalState(nextModalState);
+        this.fn = { addLine, addArcCurve };
 
         return new GCodeInterpreter({ handlers: this.handlers });
     }
     setModalState(modalState) {
-        modalState = _.pick(modalState, _.keys(this.modalState))
-        this.modalState = _.merge({}, this.modalState, modalState);
+        this.modalState = {
+            ...this.modalState,
+            ...modalState
+        };
+
         return this.modalState;
     }
     isMetricUnits() { // mm
@@ -418,16 +471,10 @@ class GCodeToolpath {
     isYZPlane() {
         return this.modalState.plane === 'G19';
     }
-    isInverseTimeFeedrateMode() {
-        return this.modalState.feedrate === 'G93';
-    }
-    isUnitsPerMinuteFeedrateMode() {
-        return this.modalState.feedrate === 'G94';
-    }
     setPosition(x, y, z) {
-        this.position.x = _.isNumber(x) ? x : this.position.x;
-        this.position.y = _.isNumber(y) ? y : this.position.y;
-        this.position.z = _.isNumber(z) ? z : this.position.z;
+        this.position.x = (typeof x === 'number') ? x : this.position.x;
+        this.position.y = (typeof y === 'number') ? y : this.position.y;
+        this.position.z = (typeof z === 'number') ? z : this.position.z;
     }
     translateX(x, relative) {
         if (x !== undefined) {
@@ -467,7 +514,7 @@ class GCodeToolpath {
     }
     translateR(r) {
         r = Number(r);
-        if (_.isNaN(r)) {
+        if (Number.isNaN(r)) {
             return 0;
         }
         return this.isImperialUnits() ? in2mm(r) : r;

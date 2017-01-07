@@ -162,10 +162,9 @@ describe('G-code Toolpath', () => {
                 }
             });
 
-            toolpath.loadFromFile('test/fixtures/linear.nc', (err, results) => {
-                expect(motions).to.deep.equal(expectedMotions);
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/linear.nc');
+            expect(motions).to.deep.equal(expectedMotions);
+            done();
         });
 
     });
@@ -192,10 +191,8 @@ describe('G-code Toolpath', () => {
                 }
             });
 
-            toolpath.loadFromFile('test/fixtures/arc-r.nc', (err, results) => {
-                // TODO: Add test case
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/arc-r.nc');
+            done();
         });
 
         it('should generate tool paths for helical thread milling.', (done) => {
@@ -219,10 +216,8 @@ describe('G-code Toolpath', () => {
                 }
             });
 
-            toolpath.loadFromFile('test/fixtures/helical-thread-milling.nc', (err, results) => {
-                // TODO: Add test case
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/helical-thread-milling.nc');
+            done();
         });
 
         it('should generate for one inch circle.', (done) => {
@@ -246,10 +241,8 @@ describe('G-code Toolpath', () => {
                 }
             });
 
-            toolpath.loadFromFile('test/fixtures/one-inch-circle.nc', (err, results) => {
-                // TODO: Add test case
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/one-inch-circle.nc');
+            done();
         });
 
     });
@@ -274,10 +267,9 @@ describe('G-code Toolpath', () => {
                     });
                 }
             });
-            toolpath.loadFromFile('test/fixtures/dwell.nc', (err, results) => {
-                expect(motions).to.be.empty;
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/dwell.nc');
+            expect(motions).to.be.empty;
+            done();
         });
     });
 
@@ -325,10 +317,9 @@ describe('G-code Toolpath', () => {
                     });
                 }
             });
-            toolpath.loadFromFile('test/fixtures/motion.nc', (err, results) => {
-                expect(motions).to.deep.equal(expectedmotions);
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/motion.nc');
+            expect(motions).to.deep.equal(expectedmotions);
+            done();
         });
     });
 
@@ -348,10 +339,9 @@ describe('G-code Toolpath', () => {
                     });
                 }
             });
-            toolpath.loadFromFile('test/fixtures/arc-no-plane.nc', (err, results) => {
-                expect(motions).to.be.empty;
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/arc-no-plane.nc');
+            expect(motions).to.be.empty;
+            done();
         });
 
         it('should generate correct tool paths in the XY-plane (G17)', (done) => {
@@ -398,10 +388,9 @@ describe('G-code Toolpath', () => {
                     });
                 }
             });
-            toolpath.loadFromFile('test/fixtures/arc-xy-plane.nc', (err, results) => {
-                expect(motions).to.deep.equal(expectedmotions);
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/arc-xy-plane.nc');
+            expect(motions).to.deep.equal(expectedmotions);
+            done();
         });
 
         it('should generate correct tool paths in the ZX-plane (G18)', (done) => {
@@ -448,10 +437,9 @@ describe('G-code Toolpath', () => {
                     });
                 }
             });
-            toolpath.loadFromFile('test/fixtures/arc-zx-plane.nc', (err, results) => {
-                expect(motions).to.deep.equal(expectedmotions);
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/arc-zx-plane.nc');
+            expect(motions).to.deep.equal(expectedmotions);
+            done();
         });
 
         it('should generate correct tool paths in the YZ-plane (G19)', (done) => {
@@ -498,10 +486,9 @@ describe('G-code Toolpath', () => {
                     });
                 }
             });
-            toolpath.loadFromFile('test/fixtures/arc-yz-plane.nc', (err, results) => {
-                expect(motions).to.deep.equal(expectedmotions);
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/arc-yz-plane.nc');
+            expect(motions).to.deep.equal(expectedmotions);
+            done();
         });
 
     });
@@ -526,10 +513,9 @@ describe('G-code Toolpath', () => {
                     });
                 }
             });
-            toolpath.loadFromFile('test/fixtures/units.nc', (err, results) => {
-                expect(motions).to.be.empty;
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/units.nc');
+            expect(motions).to.be.empty;
+            done();
         });
     });
 
@@ -553,10 +539,9 @@ describe('G-code Toolpath', () => {
                     });
                 }
             });
-            toolpath.loadFromFile('test/fixtures/coordinate.nc', (err, results) => {
-                expect(motions).to.be.empty;
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/coordinate.nc');
+            expect(motions).to.be.empty;
+            done();
         });
     });
 
@@ -580,10 +565,9 @@ describe('G-code Toolpath', () => {
                     });
                 }
             });
-            toolpath.loadFromFile('test/fixtures/feedrate.nc', (err, results) => {
-                expect(motions).to.be.empty;
-                done();
-            });
+            toolpath.loadFromFileSync('test/fixtures/feedrate.nc');
+            expect(motions).to.be.empty;
+            done();
         });
     });
 

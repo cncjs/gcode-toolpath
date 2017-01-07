@@ -1,6 +1,6 @@
 {
   "name": "gcode-toolpath",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "G-code Toolpath Generator",
   "author": "Cheton Wu <cheton@gmail.com>",
   "homepage": "https://github.com/cheton/gcode-toolpath",
@@ -26,7 +26,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "gcode-interpreter": "^1.0.0"
+    "gcode-interpreter": "^1.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",

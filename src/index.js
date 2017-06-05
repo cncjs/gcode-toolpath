@@ -30,10 +30,7 @@ class GCodeToolpath {
         plane: 'G17', // G17: XY-plane, G18: ZX-plane, G19: YZ-plane
         units: 'G21', // G20: Inches, G21: Millimeters
         distance: 'G90', // G90: Absolute, G91: Relative
-        feedrate: 'G94', // G93: Inverse Time Mode, G94: Units Per Minutes
-        program: 'M0',
-        spindle: 'M5',
-        coolant: 'M9'
+        feedrate: 'G94' // G93: Inverse Time Mode, G94: Units Per Minutes
     };
 
     handlers = {

@@ -1,4 +1,4 @@
-# gcode-toolpath [![build status](https://travis-ci.org/cheton/gcode-toolpath.svg?branch=master)](https://travis-ci.org/cheton/gcode-toolpath) [![Coverage Status](https://coveralls.io/repos/github/cheton/gcode-toolpath/badge.svg?branch=master)](https://coveralls.io/github/cheton/gcode-toolpath?branch=master)
+# gcode-toolpath [![build status](https://travis-ci.org/cncjs/gcode-toolpath.svg?branch=master)](https://travis-ci.org/cncjs/gcode-toolpath) [![Coverage Status](https://coveralls.io/repos/github/cncjs/gcode-toolpath/badge.svg?branch=master)](https://coveralls.io/github/cncjs/gcode-toolpath?branch=master)
 
 [![NPM](https://nodei.co/npm/gcode-toolpath.png?downloads=true&stars=true)](https://www.npmjs.com/package/gcode-toolpath)
 
@@ -133,4 +133,4 @@ and you will see the output as below:
 ```
 
 ## G-code Toolpath Visualizer
-Check out the source code at https://github.com/cheton/cnc/blob/master/src/web/widgets/Visualizer/GCodeVisualizer.js
+Check out the source code at https://github.com/cncjs/cnc/blob/master/src/web/widgets/Visualizer/GCodeVisualizer.js

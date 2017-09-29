@@ -40,12 +40,12 @@ class GCodeToolpath {
                 this.setModalState({ 'motion': 'G0' });
             }
 
-            let v1 = {
+            const v1 = {
                 x: this.position.x,
                 y: this.position.y,
                 z: this.position.z
             };
-            let v2 = {
+            const v2 = {
                 x: this.translateX(params.X),
                 y: this.translateY(params.Y),
                 z: this.translateZ(params.Z)
@@ -76,12 +76,12 @@ class GCodeToolpath {
                 this.setModalState({ 'motion': 'G1' });
             }
 
-            let v1 = {
+            const v1 = {
                 x: this.position.x,
                 y: this.position.y,
                 z: this.position.z
             };
-            let v2 = {
+            const v2 = {
                 x: this.translateX(params.X),
                 y: this.translateY(params.Y),
                 z: this.translateZ(params.Z)
@@ -116,17 +116,17 @@ class GCodeToolpath {
                 this.setModalState({ 'motion': 'G2' });
             }
 
-            let v1 = {
+            const v1 = {
                 x: this.position.x,
                 y: this.position.y,
                 z: this.position.z
             };
-            let v2 = {
+            const v2 = {
                 x: this.translateX(params.X),
                 y: this.translateY(params.Y),
                 z: this.translateZ(params.Z)
             };
-            let v0 = { // fixed point
+            const v0 = { // fixed point
                 x: this.translateI(params.I),
                 y: this.translateJ(params.J),
                 z: this.translateK(params.K)
@@ -135,27 +135,27 @@ class GCodeToolpath {
             const targetPosition = { x: v2.x, y: v2.y, z: v2.z };
 
             if (this.isXYPlane()) { // XY-plane
-                [ v1.x, v1.y, v1.z ] = [ v1.x, v1.y, v1.z ];
-                [ v2.x, v2.y, v2.z ] = [ v2.x, v2.y, v2.z ];
-                [ v0.x, v0.y, v0.z ] = [ v0.x, v0.y, v0.z ];
+                [v1.x, v1.y, v1.z] = [v1.x, v1.y, v1.z];
+                [v2.x, v2.y, v2.z] = [v2.x, v2.y, v2.z];
+                [v0.x, v0.y, v0.z] = [v0.x, v0.y, v0.z];
             } else if (this.isZXPlane()) { // ZX-plane
-                [ v1.x, v1.y, v1.z ] = [ v1.z, v1.x, v1.y ];
-                [ v2.x, v2.y, v2.z ] = [ v2.z, v2.x, v2.y ];
-                [ v0.x, v0.y, v0.z ] = [ v0.z, v0.x, v0.y ];
+                [v1.x, v1.y, v1.z] = [v1.z, v1.x, v1.y];
+                [v2.x, v2.y, v2.z] = [v2.z, v2.x, v2.y];
+                [v0.x, v0.y, v0.z] = [v0.z, v0.x, v0.y];
             } else if (this.isYZPlane()) { // YZ-plane
-                [ v1.x, v1.y, v1.z ] = [ v1.y, v1.z, v1.x ];
-                [ v2.x, v2.y, v2.z ] = [ v2.y, v2.z, v2.x ];
-                [ v0.x, v0.y, v0.z ] = [ v0.y, v0.z, v0.x ];
+                [v1.x, v1.y, v1.z] = [v1.y, v1.z, v1.x];
+                [v2.x, v2.y, v2.z] = [v2.y, v2.z, v2.x];
+                [v0.x, v0.y, v0.z] = [v0.y, v0.z, v0.x];
             } else {
                 console.error('The plane mode is invalid', this.modalState.plane);
                 return;
             }
 
             if (params.R) {
-                let radius = this.translateR(Number(params.R) || 0);
-                let x = v2.x - v1.x;
-                let y = v2.y - v1.y;
-                let distance = Math.sqrt(x * x + y * y);
+                const radius = this.translateR(Number(params.R) || 0);
+                const x = v2.x - v1.x;
+                const y = v2.y - v1.y;
+                const distance = Math.sqrt(x * x + y * y);
                 let height = Math.sqrt(4 * radius * radius - x * x - y * y) / 2;
 
                 if (isClockwise) {
@@ -165,8 +165,8 @@ class GCodeToolpath {
                     height = -height;
                 }
 
-                let offsetX = x / 2 - y / distance * height;
-                let offsetY = y / 2 + x / distance * height;
+                const offsetX = x / 2 - y / distance * height;
+                const offsetY = y / 2 + x / distance * height;
 
                 v0.x = v1.x + offsetX;
                 v0.y = v1.y + offsetY;
@@ -182,17 +182,17 @@ class GCodeToolpath {
                 this.setModalState({ 'motion': 'G3' });
             }
 
-            let v1 = {
+            const v1 = {
                 x: this.position.x,
                 y: this.position.y,
                 z: this.position.z
             };
-            let v2 = {
+            const v2 = {
                 x: this.translateX(params.X),
                 y: this.translateY(params.Y),
                 z: this.translateZ(params.Z)
             };
-            let v0 = { // fixed point
+            const v0 = { // fixed point
                 x: this.translateI(params.I),
                 y: this.translateJ(params.J),
                 z: this.translateK(params.K)
@@ -201,27 +201,27 @@ class GCodeToolpath {
             const targetPosition = { x: v2.x, y: v2.y, z: v2.z };
 
             if (this.isXYPlane()) { // XY-plane
-                [ v1.x, v1.y, v1.z ] = [ v1.x, v1.y, v1.z ];
-                [ v2.x, v2.y, v2.z ] = [ v2.x, v2.y, v2.z ];
-                [ v0.x, v0.y, v0.z ] = [ v0.x, v0.y, v0.z ];
+                [v1.x, v1.y, v1.z] = [v1.x, v1.y, v1.z];
+                [v2.x, v2.y, v2.z] = [v2.x, v2.y, v2.z];
+                [v0.x, v0.y, v0.z] = [v0.x, v0.y, v0.z];
             } else if (this.isZXPlane()) { // ZX-plane
-                [ v1.x, v1.y, v1.z ] = [ v1.z, v1.x, v1.y ];
-                [ v2.x, v2.y, v2.z ] = [ v2.z, v2.x, v2.y ];
-                [ v0.x, v0.y, v0.z ] = [ v0.z, v0.x, v0.y ];
+                [v1.x, v1.y, v1.z] = [v1.z, v1.x, v1.y];
+                [v2.x, v2.y, v2.z] = [v2.z, v2.x, v2.y];
+                [v0.x, v0.y, v0.z] = [v0.z, v0.x, v0.y];
             } else if (this.isYZPlane()) { // YZ-plane
-                [ v1.x, v1.y, v1.z ] = [ v1.y, v1.z, v1.x ];
-                [ v2.x, v2.y, v2.z ] = [ v2.y, v2.z, v2.x ];
-                [ v0.x, v0.y, v0.z ] = [ v0.y, v0.z, v0.x ];
+                [v1.x, v1.y, v1.z] = [v1.y, v1.z, v1.x];
+                [v2.x, v2.y, v2.z] = [v2.y, v2.z, v2.x];
+                [v0.x, v0.y, v0.z] = [v0.y, v0.z, v0.x];
             } else {
                 console.error('The plane mode is invalid', this.modalState.plane);
                 return;
             }
 
             if (params.R) {
-                let radius = this.translateR(Number(params.R) || 0);
-                let x = v2.x - v1.x;
-                let y = v2.y - v1.y;
-                let distance = Math.sqrt(x * x + y * y);
+                const radius = this.translateR(Number(params.R) || 0);
+                const x = v2.x - v1.x;
+                const y = v2.y - v1.y;
+                const distance = Math.sqrt(x * x + y * y);
                 let height = Math.sqrt(4 * radius * radius - x * x - y * y) / 2;
 
                 if (isClockwise) {
@@ -231,8 +231,8 @@ class GCodeToolpath {
                     height = -height;
                 }
 
-                let offsetX = x / 2 - y / distance * height;
-                let offsetY = y / 2 + x / distance * height;
+                const offsetX = x / 2 - y / distance * height;
+                const offsetY = y / 2 + x / distance * height;
 
                 v0.x = v1.x + offsetX;
                 v0.y = v1.y + offsetY;
@@ -250,15 +250,6 @@ class GCodeToolpath {
         // Example
         //   G4 P200
         'G4': (params) => {
-            let sleep = 0;
-            
-            if (params.S !== undefined) {
-                sleep = Number(params.S) * 1000; // seconds
-            }
-
-            if (params.P !== undefined) {
-                sleep = Number(params.P); // milliseconds
-            }
         },
         // G10: Coordinate System Data Tool and Work Offset Tables
         'G10': (params) => {
@@ -386,7 +377,7 @@ class GCodeToolpath {
         // This would set the machine's X coordinate to 10. No physical motion will occur.
         // A G92 without coordinates will reset all axes to zero.
         'G92': (params) => {
-            let v2 = {
+            const v2 = {
                 x: this.translateX(params.X, false),
                 y: this.translateY(params.Y, false),
                 z: this.translateZ(params.Z, false)
@@ -394,9 +385,11 @@ class GCodeToolpath {
 
             // A G92 without coordinates will reset all axes to zero.
             if ((params.X === undefined) && (params.Y === undefined) && (params.Z === undefined)) {
-                v2.x = v2.y = v2.z = 0;
+                v2.x = 0;
+                v2.y = 0;
+                v2.z = 0;
             }
-     
+
             // Update position
             this.setPosition(v2.x, v2.y, v2.z);
         },
@@ -429,7 +422,7 @@ class GCodeToolpath {
         const { modalState, addLine = noop, addArcCurve = noop } = { ...options };
         const nextModalState = {};
         Object.keys({ ...modalState }).forEach(key => {
-            if (!this.modalState.hasOwnProperty(key)) {
+            if (!Object.prototype.hasOwnProperty.call(this.modalState, key)) {
                 return;
             }
             nextModalState[key] = modalState[key];

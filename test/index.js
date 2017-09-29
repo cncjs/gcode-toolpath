@@ -34,7 +34,7 @@ describe('G-code Toolpath', () => {
 
             new GCodeToolpath()
                 .loadFromFile(file, (err, results) => {
-                    expect(err).to.be.okay;
+                    expect(err).to.be.null;
                     done();
                 })
                 .on('data', (data) => {
@@ -51,7 +51,7 @@ describe('G-code Toolpath', () => {
 
             new GCodeToolpath()
                 .loadFromStream(stream, (err, results) => {
-                    expect(err).to.be.okay;
+                    expect(err).to.be.null;
                     done();
                 })
                 .on('data', (data) => {
@@ -68,7 +68,7 @@ describe('G-code Toolpath', () => {
 
             new GCodeToolpath()
                 .loadFromString(string, (err, results) => {
-                    expect(err).to.be.okay;
+                    expect(err).to.be.null;
                     done();
                 })
                 .on('data', (data) => {

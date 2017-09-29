@@ -134,3 +134,7 @@ and you will see the output as below:
 
 ## G-code Toolpath Visualizer
 Check out the source code at https://github.com/cncjs/cnc/blob/master/src/web/widgets/Visualizer/GCodeVisualizer.js
+
+## License
+
+MIT

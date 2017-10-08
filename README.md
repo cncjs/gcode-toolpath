@@ -24,10 +24,17 @@ const gcode = new Toolpath({
         spindle: 'M5', // M3, M4, M5
         coolant: 'M9' // M7, M8, M9
     },
+    // @param {object} modal The modal object.
+    // @param {object} v1 A 3D vector of the start point.
+    // @param {object} v2 A 3D vector of the end point.
     addLine: (modal, v1, v2) => {
         var motion = modal.motion;
         toolpaths.push({ motion: motion, v1: v1, v2: v2 });
     },
+    // @param {object} modal The modal object.
+    // @param {object} v1 A 3D vector of the start point.
+    // @param {object} v2 A 3D vector of the end point.
+    // @param {object} v0 A 3D vector of the fixed point.
     addArcCurve: (modal, v1, v2, v0) => {
         var motion = modal.motion;
         toolpaths.push({ motion: motion, v1: v1, v2: v2, v0: v0 });
@@ -72,10 +79,17 @@ const GCODE = [
 
 const toolpaths = [];
 const gcode = new Toolpath({
+    // @param {object} modal The modal object.
+    // @param {object} v1 A 3D vector of the start point.
+    // @param {object} v2 A 3D vector of the end point.
     addLine: (modal, v1, v2) => {
         const motion = modal.motion;
         toolpaths.push({ motion: motion, v1: v1, v2: v2 });
     },
+    // @param {object} modal The modal object.
+    // @param {object} v1 A 3D vector of the start point.
+    // @param {object} v2 A 3D vector of the end point.
+    // @param {object} v0 A 3D vector of the fixed point.
     addArcCurve: (modal, v1, v2, v0) => {
         const motion = modal.motion;
         toolpaths.push({ motion: motion, v1: v1, v2: v2, v0: v0 });

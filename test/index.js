@@ -1,13 +1,13 @@
 import chai from 'chai';
 import fs from 'fs';
-import { GCodeToolpath } from '../lib/';
+import Toolpath from '../src/';
 
 const expect = chai.expect;
 const should = chai.should();
 
 describe('G-code Toolpath', () => {
     describe('Pass a null value as the first argument', () => {
-        const toolpath = new GCodeToolpath();
+        const toolpath = new Toolpath();
         it('should call loadFromString\'s callback.', (done) => {
             toolpath.loadFromString(null, (err, results) => {
                 expect(err).to.be.equal(null);
@@ -32,7 +32,7 @@ describe('G-code Toolpath', () => {
         it('should call event listeners when loading G-code from file.', (done) => {
             const file = 'test/fixtures/circle.nc';
 
-            new GCodeToolpath()
+            new Toolpath()
                 .loadFromFile(file, (err, results) => {
                     expect(err).to.be.null;
                     done();
@@ -49,7 +49,7 @@ describe('G-code Toolpath', () => {
         it('should call event listeners when loading G-code from stream.', (done) => {
             const stream = fs.createReadStream('test/fixtures/circle.nc');
 
-            new GCodeToolpath()
+            new Toolpath()
                 .loadFromStream(stream, (err, results) => {
                     expect(err).to.be.null;
                     done();
@@ -66,7 +66,7 @@ describe('G-code Toolpath', () => {
         it('should call event listeners when loading G-code from string.', (done) => {
             const string = fs.readFileSync('test/fixtures/circle.nc', 'utf8');
 
-            new GCodeToolpath()
+            new Toolpath()
                 .loadFromString(string, (err, results) => {
                     expect(err).to.be.null;
                     done();
@@ -151,11 +151,11 @@ describe('G-code Toolpath', () => {
                 }
             ];
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                modalState: {},
-                addLine: (modalState, v1, v2) => {
+            const toolpath = new Toolpath({
+                modal: {},
+                addLine: (modal, v1, v2) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2
                     });
@@ -172,18 +172,18 @@ describe('G-code Toolpath', () => {
     describe('Arc Curve: G2/G3', () => {
         it('should generate tool paths for simple radius.', (done) => {
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                modalState: {},
-                addLine: (modalState, v1, v2) => {
+            const toolpath = new Toolpath({
+                modal: {},
+                addLine: (modal, v1, v2) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
-                addArcCurve: (modalState, v1, v2, v0) => {
+                addArcCurve: (modal, v1, v2, v0) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2,
                         v0: v0
@@ -197,18 +197,18 @@ describe('G-code Toolpath', () => {
 
         it('should generate tool paths for helical thread milling.', (done) => {
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                modalState: {},
-                addLine: (modalState, v1, v2) => {
+            const toolpath = new Toolpath({
+                modal: {},
+                addLine: (modal, v1, v2) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
-                addArcCurve: (modalState, v1, v2, v0) => {
+                addArcCurve: (modal, v1, v2, v0) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2,
                         v0: v0
@@ -222,18 +222,18 @@ describe('G-code Toolpath', () => {
 
         it('should generate for one inch circle.', (done) => {
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                modalState: {},
-                addLine: (modalState, v1, v2) => {
+            const toolpath = new Toolpath({
+                modal: {},
+                addLine: (modal, v1, v2) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
-                addArcCurve: (modalState, v1, v2, v0) => {
+                addArcCurve: (modal, v1, v2, v0) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2,
                         v0: v0
@@ -250,17 +250,17 @@ describe('G-code Toolpath', () => {
     describe('Dwell: G4', () => {
         it('should not generate tool paths.', (done) => {
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                addLine: (modalState, v1, v2) => {
+            const toolpath = new Toolpath({
+                addLine: (modal, v1, v2) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
-                addArcCurve: (modalState, v1, v2, v0) => {
+                addArcCurve: (modal, v1, v2, v0) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2,
                         v0: v0
@@ -300,17 +300,17 @@ describe('G-code Toolpath', () => {
                 }
             ];
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                addLine: (modalState, v1, v2) => {
+            const toolpath = new Toolpath({
+                addLine: (modal, v1, v2) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
-                addArcCurve: (modalState, v1, v2, v0) => {
+                addArcCurve: (modal, v1, v2, v0) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2,
                         v0: v0
@@ -326,13 +326,13 @@ describe('G-code Toolpath', () => {
     describe('Plane: G17/G18/G19', () => {
         it('should not generate tool paths with wrong plane mode.', (done) => {
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                modalState: {
+            const toolpath = new Toolpath({
+                modal: {
                     plane: 'xx' // The plane is invalid
                 },
-                addArcCurve: (modalState, v1, v2, v0) => {
+                addArcCurve: (modal, v1, v2, v0) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2,
                         v0: v0
@@ -370,18 +370,18 @@ describe('G-code Toolpath', () => {
                 }
             ];
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                modalState: {},
-                addLine: (modalState, v1, v2) => {
+            const toolpath = new Toolpath({
+                modal: {},
+                addLine: (modal, v1, v2) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
-                addArcCurve: (modalState, v1, v2, v0) => {
+                addArcCurve: (modal, v1, v2, v0) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2,
                         v0: v0
@@ -419,18 +419,18 @@ describe('G-code Toolpath', () => {
                 }
             ];
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                modalState: {},
-                addLine: (modalState, v1, v2) => {
+            const toolpath = new Toolpath({
+                modal: {},
+                addLine: (modal, v1, v2) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
-                addArcCurve: (modalState, v1, v2, v0) => {
+                addArcCurve: (modal, v1, v2, v0) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2,
                         v0: v0
@@ -468,18 +468,18 @@ describe('G-code Toolpath', () => {
                 }
             ];
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                modalState: {},
-                addLine: (modalState, v1, v2) => {
+            const toolpath = new Toolpath({
+                modal: {},
+                addLine: (modal, v1, v2) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
-                addArcCurve: (modalState, v1, v2, v0) => {
+                addArcCurve: (modal, v1, v2, v0) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2,
                         v0: v0
@@ -496,17 +496,17 @@ describe('G-code Toolpath', () => {
     describe('Units: G20/G21', () => {
         it('should not generate tool paths.', (done) => {
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                addLine: (modalState, v1, v2) => {
+            const toolpath = new Toolpath({
+                addLine: (modal, v1, v2) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
-                addArcCurve: (modalState, v1, v2, v0) => {
+                addArcCurve: (modal, v1, v2, v0) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2,
                         v0: v0
@@ -522,17 +522,17 @@ describe('G-code Toolpath', () => {
     describe('Coordinate: G54/G55/G56/G57/G58/G59', () => {
         it('should not generate tool paths.', (done) => {
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                addLine: (modalState, v1, v2) => {
+            const toolpath = new Toolpath({
+                addLine: (modal, v1, v2) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
-                addArcCurve: (modalState, v1, v2, v0) => {
+                addArcCurve: (modal, v1, v2, v0) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2,
                         v0: v0
@@ -548,17 +548,17 @@ describe('G-code Toolpath', () => {
     describe('Feed Rate: G93/G94', () => {
         it('should not generate tool paths.', (done) => {
             const motions = [];
-            const toolpath = new GCodeToolpath({
-                addLine: (modalState, v1, v2) => {
+            const toolpath = new Toolpath({
+                addLine: (modal, v1, v2) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2
                     });
                 },
-                addArcCurve: (modalState, v1, v2, v0) => {
+                addArcCurve: (modal, v1, v2, v0) => {
                     motions.push({
-                        motion: modalState.motion,
+                        motion: modal.motion,
                         v1: v1,
                         v2: v2,
                         v0: v0

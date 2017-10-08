@@ -9,43 +9,43 @@
 ## Usage
 
 ```js
-var GCodeToolpath = require('gcode-toolpath').GCodeToolpath;
+const Toolpath = require('gcode-toolpath');
 
-var toolpaths = [];
-var gcode = new GCodeToolpath({
-    modalState: { // [optional] initial modal state
+const toolpaths = [];
+const gcode = new Toolpath({
+    modal: { // [optional] initial modal state
         motion: 'G0', // G0, G1, G2, G3, G38.2, G38.3, G38.4, G38.5, G80
-        coordinate: 'G54', // G54, G55, G56, G57, G58, G59
+        wcs: 'G54', // G54, G55, G56, G57, G58, G59
         plane: 'G17', // G17: xy-plane, G18: xz-plane, G19: yz-plane
         units: 'G21', // G20: Inches, G21: Millimeters
         distance: 'G90', // G90: Absolute, G91: Relative
-        feedrate: 'G94', // G93: Inverse Time Mode, G94: Units Per Minutes
-        program: 'M0',
-        spindle: 'M5',
-        coolant: 'M9'
+        feedrate: 'G94', // G93: Inverse time mode, G94: Units per minute, G95: Units per rev
+        program: 'M0', // M0, M1, M2, M30
+        spindle: 'M5', // M3, M4, M5
+        coolant: 'M9' // M7, M8, M9
     },
-    addLine: (modalState, v1, v2) => {
-        var motion = modalState.motion;
+    addLine: (modal, v1, v2) => {
+        var motion = modal.motion;
         toolpaths.push({ motion: motion, v1: v1, v2: v2 });
     },
-    addArcCurve: (modalState, v1, v2, v0) => {
-        var motion = modalState.motion;
+    addArcCurve: (modal, v1, v2, v0) => {
+        var motion = modal.motion;
         toolpaths.push({ motion: motion, v1: v1, v2: v2, v0: v0 });
     }
 });
 
 // Load G-code from file
-var file = 'example.nc';
+const file = 'example.nc';
 gcode.loadFromFile(file, function(err, data) {
 });
 
 // Load G-code from stream
-var stream = fs.createReadStream(file, { encoding: 'utf8' });
+const stream = fs.createReadStream(file, { encoding: 'utf8' });
 gcode.loadFromStream(stream, function(err, data) {
 });
 
 // Load G-code from string
-var str = fs.readFileSync(file, 'utf8');
+const str = fs.readFileSync(file, 'utf8');
 gcode.loadFromString(str, function(err, data) {
 });
 ```
@@ -54,7 +54,7 @@ gcode.loadFromString(str, function(err, data) {
 
 Run this example with babel-node:
 ```js
-import { GCodeToolpath } from 'gcode-toolpath';
+import Toolpath from 'gcode-toolpath';
 
 const GCODE = [
     'N1 G17 G20 G90 G94 G54',
@@ -70,14 +70,14 @@ const GCODE = [
     'N11 G00 X0. Y0. Z0.25'
 ].join('\n');
 
-let toolpaths = [];
-let gcode = new GCodeToolpath({
-    addLine: (modalState, v1, v2) => {
-        var motion = modalState.motion;
+const toolpaths = [];
+const gcode = new Toolpath({
+    addLine: (modal, v1, v2) => {
+        const motion = modal.motion;
         toolpaths.push({ motion: motion, v1: v1, v2: v2 });
     },
-    addArcCurve: (modalState, v1, v2, v0) => {
-        var motion = modalState.motion;
+    addArcCurve: (modal, v1, v2, v0) => {
+        const motion = modal.motion;
         toolpaths.push({ motion: motion, v1: v1, v2: v2, v0: v0 });
     }
 });

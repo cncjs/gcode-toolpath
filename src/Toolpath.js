@@ -22,8 +22,6 @@ class Toolpath {
         z: 0
     };
 
-    // https://github.com/grbl/grbl/wiki/Configuring-Grbl-v0.9
-    // Also see "../constants/modal-groups.js"
     modal = {
         // Moton Mode
         // G0, G1, G2, G3, G38.2, G38.3, G38.4, G38.5, G80
@@ -473,7 +471,6 @@ class Toolpath {
                 this.setModal({ feedmode: 'G95' });
             }
         },
-        // Program Mode
         // M0: Program Pause
         'M0': () => {
             if (this.modal.program !== 'M0') {

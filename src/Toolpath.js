@@ -67,7 +67,9 @@ class Toolpath {
 
         // Coolant State
         // M7, M8, M9
-        coolant: 'M9' // 'M7', 'M8', 'M7,M8', or 'M9'
+        coolant: 'M9', // 'M7', 'M8', 'M7,M8', or 'M9'
+
+        tool: 0
     };
 
     handlers = {
@@ -515,7 +517,10 @@ class Toolpath {
             }
         },
         // M6: Tool Change
-        'M6': () => {
+        'M6': (params) => {
+            if (params && params.T !== undefined) {
+                this.setModal({ tool: params.T });
+            }
         },
         // Coolant Control
         // M7: Turn mist coolant on
@@ -544,6 +549,11 @@ class Toolpath {
         'M9': () => {
             if (this.modal.coolant !== 'M9') {
                 this.setModal({ coolant: 'M9' });
+            }
+        },
+        'T': (tool) => {
+            if (tool !== undefined) {
+                this.setModal({ tool: tool });
             }
         }
     };

@@ -25,7 +25,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "gcode-interpreter": "^2.0.0"
+    "gcode-interpreter": "^2.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

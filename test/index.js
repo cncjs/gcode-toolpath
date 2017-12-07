@@ -112,16 +112,16 @@ describe('G-code Toolpath', () => {
                 },
                 {
                     "motion": "G0",
-                        "v1": {
-                            "x": 28.4099,
-                            "y": 14.12748,
-                            "z": 0
-                        },
-                        "v2": {
-                            "x": 28.4099,
-                            "y": 14.12748,
-                            "z": 1.0007599999999999
-                        }
+                    "v1": {
+                        "x": 28.4099,
+                        "y": 14.12748,
+                        "z": 0
+                    },
+                    "v2": {
+                        "x": 28.4099,
+                        "y": 14.12748,
+                        "z": 1.0007599999999999
+                    }
                 },
                 {
                     "motion": "G0",
@@ -567,6 +567,109 @@ describe('G-code Toolpath', () => {
             });
             toolpath.loadFromFileSync('test/fixtures/feedrate.nc');
             expect(motions).to.be.empty;
+            done();
+        });
+    });
+
+    describe('Tool Change & Tool Select: M6/T', () => {
+        it('should change the modal state: t2laser.nc', (done) => {
+            const motions = [];
+            const toolpath = new Toolpath({
+                addLine: (modal, v1, v2) => {
+                    motions.push({
+                        motion: modal.motion,
+                        tool: modal.tool
+                    });
+                },
+                addArcCurve: (modal, v1, v2, v0) => {
+                    motions.push({
+                        motion: modal.motion,
+                        tool: modal.tool
+                    });
+                }
+            });
+            const expectedMotions = [
+                { "motion": "G0", tool: 1 },
+                { "motion": "G0", tool: 1 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 },
+                { "motion": "G1", tool: 2 }
+            ];
+
+            toolpath.loadFromFileSync('test/fixtures/t2laser.nc');
+            expect(motions).to.deep.equal(expectedMotions);
+            done();
+        });
+
+        it('should change the modal state: linear.nc', (done) => {
+            const expectedMotions = [
+                {
+                    "motion": "G0",
+                    "tool": 0
+                },
+                {
+                    "motion": "G0",
+                    "tool": 4
+                },
+                {
+                    "motion": "G0",
+                    "tool": 4
+                },
+                {
+                    "motion": "G0",
+                    "tool": 2
+                },
+                {
+                    "motion": "G1",
+                    "tool": 2
+                }
+            ];
+            const motions = [];
+            const toolpath = new Toolpath({
+                addLine: (modal, v1, v2) => {
+                    motions.push({
+                        motion: modal.motion,
+                        tool: modal.tool
+                    });
+                },
+                addArcCurve: (modal, v1, v2, v0) => {
+                    motions.push({
+                        motion: modal.motion,
+                        tool: modal.tool
+                    });
+                }
+            });
+
+            toolpath.loadFromFileSync('test/fixtures/linear.nc');
+            expect(motions).to.deep.equal(expectedMotions);
             done();
         });
     });

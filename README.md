@@ -22,22 +22,25 @@ const gcode = new Toolpath({
         feedrate: 'G94', // G93: Inverse time mode, G94: Units per minute, G95: Units per rev
         program: 'M0', // M0, M1, M2, M30
         spindle: 'M5', // M3, M4, M5
-        coolant: 'M9' // M7, M8, M9
+        coolant: 'M9', // M7, M8, M9
+        tool: 0
     },
     // @param {object} modal The modal object.
     // @param {object} v1 A 3D vector of the start point.
     // @param {object} v2 A 3D vector of the end point.
     addLine: (modal, v1, v2) => {
-        var motion = modal.motion;
-        toolpaths.push({ motion: motion, v1: v1, v2: v2 });
+        const motion = modal.motion;
+        const tool = modal.tool;
+        toolpaths.push({ motion: motion, tool: tool, v1: v1, v2: v2 });
     },
     // @param {object} modal The modal object.
     // @param {object} v1 A 3D vector of the start point.
     // @param {object} v2 A 3D vector of the end point.
     // @param {object} v0 A 3D vector of the fixed point.
     addArcCurve: (modal, v1, v2, v0) => {
-        var motion = modal.motion;
-        toolpaths.push({ motion: motion, v1: v1, v2: v2, v0: v0 });
+        const motion = modal.motion;
+        const tool = modal.tool;
+        toolpaths.push({ motion: motion, tool: tool, v1: v1, v2: v2, v0: v0 });
     }
 });
 
@@ -64,7 +67,7 @@ Run this example with babel-node:
 import Toolpath from 'gcode-toolpath';
 
 const GCODE = [
-    'N1 G17 G20 G90 G94 G54',
+    'N1 T2 G17 G20 G90 G94 G54',
     'N2 G0 Z0.25',
     'N3 X-0.5 Y0.',
     'N4 Z0.1',
@@ -84,7 +87,8 @@ const gcode = new Toolpath({
     // @param {object} v2 A 3D vector of the end point.
     addLine: (modal, v1, v2) => {
         const motion = modal.motion;
-        toolpaths.push({ motion: motion, v1: v1, v2: v2 });
+        const tool = modal.tool;
+        toolpaths.push({ motion: motion, tool: tool, v1: v1, v2: v2 });
     },
     // @param {object} modal The modal object.
     // @param {object} v1 A 3D vector of the start point.
@@ -92,7 +96,8 @@ const gcode = new Toolpath({
     // @param {object} v0 A 3D vector of the fixed point.
     addArcCurve: (modal, v1, v2, v0) => {
         const motion = modal.motion;
-        toolpaths.push({ motion: motion, v1: v1, v2: v2, v0: v0 });
+        const tool = modal.tool;
+        toolpaths.push({ motion: motion, tool: tool, v1: v1, v2: v2, v0: v0 });
     }
 });
 
@@ -111,38 +116,48 @@ gcode
 and you will see the output as below:
 ```js
 [ { motion: 'G0',
+    tool: 2,
     v1: { x: 0, y: 0, z: 0 },
     v2: { x: 0, y: 0, z: 6.35 } },
   { motion: 'G0',
+    tool: 2,
     v1: { x: 0, y: 0, z: 6.35 },
-    v2: { x: -12.7, y: 0, z: 0 } },
+    v2: { x: -12.7, y: 0, z: 6.35 } },
   { motion: 'G0',
-    v1: { x: -12.7, y: 0, z: 0 },
-    v2: { x: 0, y: 0, z: 2.54 } },
+    tool: 2,
+    v1: { x: -12.7, y: 0, z: 6.35 },
+    v2: { x: -12.7, y: 0, z: 2.54 } },
   { motion: 'G1',
-    v1: { x: 0, y: 0, z: 2.54 },
-    v2: { x: 0, y: 0, z: 0 } },
+    tool: 2,
+    v1: { x: -12.7, y: 0, z: 2.54 },
+    v2: { x: -12.7, y: 0, z: 0 } },
   { motion: 'G2',
-    v1: { x: 0, y: 0, z: 0 },
+    tool: 2,
+    v1: { x: -12.7, y: 0, z: 0 },
     v2: { x: 0, y: 12.7, z: 0 },
-    v0: { x: 12.7, y: 0, z: 0 } },
+    v0: { x: 0, y: 0, z: 0 } },
   { motion: 'G2',
+    tool: 2,
     v1: { x: 0, y: 12.7, z: 0 },
     v2: { x: 12.7, y: 0, z: 0 },
     v0: { x: 0, y: 0, z: 0 } },
   { motion: 'G2',
+    tool: 2,
     v1: { x: 12.7, y: 0, z: 0 },
     v2: { x: 0, y: -12.7, z: 0 },
     v0: { x: 0, y: 0, z: 0 } },
   { motion: 'G2',
+    tool: 2,
     v1: { x: 0, y: -12.7, z: 0 },
     v2: { x: -12.7, y: 0, z: 0 },
     v0: { x: 0, y: 0, z: 0 } },
   { motion: 'G1',
+    tool: 2,
     v1: { x: -12.7, y: 0, z: 0 },
-    v2: { x: 0, y: 0, z: 2.54 } },
+    v2: { x: -12.7, y: 0, z: 2.54 } },
   { motion: 'G0',
-    v1: { x: 0, y: 0, z: 2.54 },
+    tool: 2,
+    v1: { x: -12.7, y: 0, z: 2.54 },
     v2: { x: 0, y: 0, z: 6.35 } } ]
 ```
 

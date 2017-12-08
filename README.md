@@ -12,7 +12,7 @@
 const Toolpath = require('gcode-toolpath');
 
 const toolpaths = [];
-const gcode = new Toolpath({
+const toolpath = new Toolpath({
     // Initial position (optional)
     position: { x: 0, y: 0, z: 0 },
 
@@ -50,19 +50,26 @@ const gcode = new Toolpath({
     }
 });
 
+// Position
+toolpath.setPosition({ x: 100, y: 10 }); // x=100, y=10, z=0
+toolpath.setPosition(10, 20, 30); // x=10, y=20, z=30
+
+// Modal
+toolpath.setModal({ tool: 1 });
+
 // Load G-code from file
 const file = 'example.nc';
-gcode.loadFromFile(file, function(err, data) {
+toolpath.loadFromFile(file, function(err, data) {
 });
 
 // Load G-code from stream
 const stream = fs.createReadStream(file, { encoding: 'utf8' });
-gcode.loadFromStream(stream, function(err, data) {
+toolpath.loadFromStream(stream, function(err, data) {
 });
 
 // Load G-code from string
 const str = fs.readFileSync(file, 'utf8');
-gcode.loadFromString(str, function(err, data) {
+toolpath.loadFromString(str, function(err, data) {
 });
 ```
 
@@ -87,7 +94,7 @@ const GCODE = [
 ].join('\n');
 
 const toolpaths = [];
-const gcode = new Toolpath({
+const toolpath = new Toolpath({
     // @param {object} modal The modal object.
     // @param {object} v1 A 3D vector of the start point.
     // @param {object} v2 A 3D vector of the end point.
@@ -107,7 +114,7 @@ const gcode = new Toolpath({
     }
 });
 
-gcode
+toolpath
     .loadFromString(GCODE, (err, results) => {
         console.log(toolpaths);
     })

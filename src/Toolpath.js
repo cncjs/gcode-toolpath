@@ -566,8 +566,8 @@ class Toolpath {
     // @param {function} [options.addArcCurve]
     constructor(options) {
         const {
-            modal,
             position,
+            modal,
             addLine = noop,
             addArcCurve = noop
         } = { ...options };
@@ -590,17 +590,17 @@ class Toolpath {
 
         this.fn = { addLine, addArcCurve };
 
-        const interpreter = new Interpreter({ handlers: this.handlers });
-        interpreter.setPosition = (...pos) => {
+        const toolpath = new Interpreter({ handlers: this.handlers });
+        toolpath.getPosition = () => ({ ...this.position });
+        toolpath.getModal = () => ({ ...this.modal });
+        toolpath.setPosition = (...pos) => {
             return this.setPosition(...pos);
         };
-        interpreter.getPosition = () => ({ ...this.position });
-        interpreter.setModal = (modal) => {
+        toolpath.setModal = (modal) => {
             return this.setModal(modal);
         };
-        interpreter.getModal = () => ({ ...this.modal });
 
-        return interpreter;
+        return toolpath;
     }
     setModal(modal) {
         this.modal = {

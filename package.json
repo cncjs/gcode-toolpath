@@ -1,6 +1,6 @@
 {
   "name": "gcode-toolpath",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "G-code Toolpath Generator",
   "author": "Cheton Wu <cheton@gmail.com>",
   "homepage": "https://github.com/cncjs/gcode-toolpath",

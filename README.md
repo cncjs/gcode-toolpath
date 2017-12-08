@@ -13,7 +13,11 @@ const Toolpath = require('gcode-toolpath');
 
 const toolpaths = [];
 const gcode = new Toolpath({
-    modal: { // [optional] initial modal state
+    // Initial position (optional)
+    position: { x: 0, y: 0, z: 0 },
+
+    // Initial modal state (optional)
+    modal: {
         motion: 'G0', // G0, G1, G2, G3, G38.2, G38.3, G38.4, G38.5, G80
         wcs: 'G54', // G54, G55, G56, G57, G58, G59
         plane: 'G17', // G17: xy-plane, G18: xz-plane, G19: yz-plane
@@ -25,6 +29,7 @@ const gcode = new Toolpath({
         coolant: 'M9', // M7, M8, M9
         tool: 0
     },
+
     // @param {object} modal The modal object.
     // @param {object} v1 A 3D vector of the start point.
     // @param {object} v2 A 3D vector of the end point.
@@ -33,6 +38,7 @@ const gcode = new Toolpath({
         const tool = modal.tool;
         toolpaths.push({ motion: motion, tool: tool, v1: v1, v2: v2 });
     },
+
     // @param {object} modal The modal object.
     // @param {object} v1 A 3D vector of the start point.
     // @param {object} v2 A 3D vector of the end point.

@@ -69,6 +69,7 @@ class Toolpath {
         // M7, M8, M9
         coolant: 'M9', // 'M7', 'M8', 'M7,M8', or 'M9'
 
+        // Tool Select
         tool: 0
     };
 
@@ -559,11 +560,25 @@ class Toolpath {
     };
 
     // @param {object} [options]
-    // @param {object} [options.modalState]
+    // @param {object} [options.position]
+    // @param {object} [options.modal]
     // @param {function} [options.addLine]
     // @param {function} [options.addArcCurve]
     constructor(options) {
-        const { modal, addLine = noop, addArcCurve = noop } = { ...options };
+        const {
+            modal,
+            position,
+            addLine = noop,
+            addArcCurve = noop
+        } = { ...options };
+
+        // Position
+        if (position) {
+            const { x, y, z } = { ...position };
+            this.setPosition(x, y, z);
+        }
+
+        // Modal
         const nextModal = {};
         Object.keys({ ...modal }).forEach(key => {
             if (!Object.prototype.hasOwnProperty.call(this.modal, key)) {
@@ -572,9 +587,20 @@ class Toolpath {
             nextModal[key] = modal[key];
         });
         this.setModal(nextModal);
+
         this.fn = { addLine, addArcCurve };
 
-        return new Interpreter({ handlers: this.handlers });
+        const interpreter = new Interpreter({ handlers: this.handlers });
+        interpreter.setPosition = (...pos) => {
+            return this.setPosition(...pos);
+        };
+        interpreter.getPosition = () => ({ ...this.position });
+        interpreter.setModal = (modal) => {
+            return this.setModal(modal);
+        };
+        interpreter.getModal = () => ({ ...this.modal });
+
+        return interpreter;
     }
     setModal(modal) {
         this.modal = {
@@ -604,10 +630,18 @@ class Toolpath {
     isYZPlane() {
         return this.modal.plane === 'G19';
     }
-    setPosition(x, y, z) {
-        this.position.x = (typeof x === 'number') ? x : this.position.x;
-        this.position.y = (typeof y === 'number') ? y : this.position.y;
-        this.position.z = (typeof z === 'number') ? z : this.position.z;
+    setPosition(...pos) {
+        if (typeof pos[0] === 'object') {
+            const { x, y, z } = { ...pos[0] };
+            this.position.x = (typeof x === 'number') ? x : this.position.x;
+            this.position.y = (typeof y === 'number') ? y : this.position.y;
+            this.position.z = (typeof z === 'number') ? z : this.position.z;
+        } else {
+            const [x, y, z] = pos;
+            this.position.x = (typeof x === 'number') ? x : this.position.x;
+            this.position.y = (typeof y === 'number') ? y : this.position.y;
+            this.position.z = (typeof z === 'number') ? z : this.position.z;
+        }
     }
     translateX(x, relative) {
         if (x !== undefined) {

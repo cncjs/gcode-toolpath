@@ -81,6 +81,101 @@ describe('G-code Toolpath', () => {
         });
     });
 
+    describe('position', () => {
+        it('should match the specified position.', (done) => {
+            const toolpath = new Toolpath({
+                position: { x: 200, y: 100 }
+            });
+            expect(toolpath.getPosition()).to.deep.equal({ x: 200, y: 100, z: 0 });
+            toolpath.setPosition({ y: 200, z: 10 });
+            expect(toolpath.getPosition()).to.deep.equal({ x: 200, y: 200, z: 10 });
+            toolpath.setPosition(10, 10);
+            expect(toolpath.getPosition()).to.deep.equal({ x: 10, y: 10, z: 10 });
+            toolpath.setPosition(0, 0, 0);
+            expect(toolpath.getPosition()).to.deep.equal({ x: 0, y: 0, z: 0 });
+            done();
+        });
+    });
+
+    describe('modal', () => {
+        it('should match the specified modal state.', (done) => {
+            const toolpath = new Toolpath({
+                modal: {
+                    tool: 1
+                }
+            });
+            const expectedModal = {
+                // Moton Mode
+                // G0, G1, G2, G3, G38.2, G38.3, G38.4, G38.5, G80
+                motion: 'G0',
+
+                // Coordinate System Select
+                // G54, G55, G56, G57, G58, G59
+                wcs: 'G54',
+
+                // Plane Select
+                // G17: XY-plane, G18: ZX-plane, G19: YZ-plane
+                plane: 'G17',
+
+                // Units Mode
+                // G20: Inches, G21: Millimeters
+                units: 'G21',
+
+                // Distance Mode
+                // G90: Absolute, G91: Relative
+                distance: 'G90',
+
+                // Arc IJK distance mode
+                arc: 'G91.1',
+
+                // Feed Rate Mode
+                // G93: Inverse time mode, G94: Units per minute mode, G95: Units per rev mode
+                feedrate: 'G94',
+
+                // Cutter Radius Compensation
+                cutter: 'G40',
+
+                // Tool Length Offset
+                // G43.1, G49
+                tlo: 'G49',
+
+                // Program Mode
+                // M0, M1, M2, M30
+                program: 'M0',
+
+                // Spingle State
+                // M3, M4, M5
+                spindle: 'M5',
+
+                // Coolant State
+                // M7, M8, M9
+                coolant: 'M9', // 'M7', 'M8', 'M7,M8', or 'M9'
+
+                // Tool Select
+                tool: 0
+            };
+
+            expect(toolpath.getModal()).to.deep.equal({
+                motion: 'G0',
+                wcs: 'G54',
+                plane: 'G17',
+                units: 'G21',
+                distance: 'G90',
+                arc: 'G91.1',
+                feedrate: 'G94',
+                cutter: 'G40',
+                tlo: 'G49',
+                program: 'M0',
+                spindle: 'M5',
+                coolant: 'M9',
+                tool: 1
+            });
+            toolpath.setModal({ tool: 2 });
+            expect(toolpath.getModal().tool).to.equal(2);
+            done();
+        });
+    });
+
     describe('Linear Move: G0/G1', () => {
         it('should generate tool paths for linear movement.', (done) => {
             const expectedMotions = [

@@ -26,7 +26,7 @@ class Toolpath {
         return {
             x: pos.x + this.g92offset.x,
             y: pos.y + this.g92offset.y,
-            z: pos.z + this.g92offset.z,
+            z: pos.z + this.g92offset.z
         };
     }
     offsetAddLine = (start, end) => {
@@ -460,17 +460,17 @@ class Toolpath {
             } else {
                 // The calls to translateX/Y/Z() below are necessary for inch/mm conversion
                 // params.X/Y/Z must be interpreted as absolute positions, hence the "false"
-                if (params.X != undefined) {
+                if (params.X !== undefined) {
                     const xmm = this.translateX(params.X, false);
                     this.g92offset.x += this.position.x - xmm;
                     this.position.x = xmm;
                 }
-                if (params.Y != undefined) {
+                if (params.Y !== undefined) {
                     const ymm = this.translateY(params.Y, false);
                     this.g92offset.y += this.position.y - ymm;
                     this.position.y = ymm;
                 }
-                if (params.Z != undefined) {
+                if (params.Z !== undefined) {
                     const zmm = this.translateX(params.Z, false);
                     this.g92offset.z += this.position.z - zmm;
                     this.position.z = zmm;
@@ -614,7 +614,9 @@ class Toolpath {
             addLine = noop,
             addArcCurve = noop
         } = { ...options };
-        this.g92offset.x = this.g92offset.y = this.g92offset.z = 0;
+        this.g92offset.x = 0;
+        this.g92offset.y = 0;
+        this.g92offset.z = 0;
 
         // Position
         if (position) {

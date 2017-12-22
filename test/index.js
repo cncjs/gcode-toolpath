@@ -769,4 +769,91 @@ describe('G-code Toolpath', () => {
         });
     });
 
+    describe('Temporary Offset: G92', () => {
+        it('should generate tool paths with correct endpoints.', (done) => {
+            const expectedMotions = [
+                {
+                    "motion": "G0",
+                    "v1": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "v2": {
+                        "x": 1,
+                        "y": 2,
+                        "z": 3
+                    }
+                },
+                {
+                    "motion": "G0",
+                    "v1": {
+                        "x": 1,
+                        "y": 2,
+                        "z": 3
+                    },
+                    "v2": {
+                        "x": 2,
+                        "y": 4,
+                        "z": 6
+                    }
+                },
+                {
+                    "motion": "G0",
+                    "v1": {
+                        "x": 2,
+                        "y": 4,
+                        "z": 6
+                    },
+                    "v2": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                {
+                    "motion": "G0",
+                    "v1": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "v2": {
+                        "x": 0,
+                        "y": 0,
+                        "z": -1
+                    }
+                },
+                {
+                    "motion": "G0",
+                    "v1": {
+                        "x": 0,
+                        "y": 0,
+                        "z": -1
+                    },
+                    "v2": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+            ];
+            const motions = [];
+            const toolpath = new Toolpath({
+                modal: {},
+                addLine: (modal, v1, v2) => {
+                    motions.push({
+                        motion: modal.motion,
+                        v1: v1,
+                        v2: v2
+                    });
+                }
+            });
+
+            toolpath.loadFromFileSync('test/fixtures/g92offset.nc');
+            expect(motions).to.deep.equal(expectedMotions);
+            done();
+        });
+
+    });
 });

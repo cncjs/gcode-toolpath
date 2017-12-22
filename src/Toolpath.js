@@ -16,6 +16,26 @@ const translatePosition = (position, newPosition, relative) => {
 };
 
 class Toolpath {
+    g92offset = {
+        x: 0,
+        y: 0,
+        z: 0
+    };
+
+    offsetG92 = (pos) => {
+        return {
+            x: pos.x + this.g92offset.x,
+            y: pos.y + this.g92offset.y,
+            z: pos.z + this.g92offset.z,
+        };
+    }
+    offsetAddLine = (start, end) => {
+        this.fn.addLine(this.modal, this.offsetG92(start), this.offsetG92(end));
+    }
+    offsetAddArcCurve = (start, end, center) => {
+        this.fn.addArcCurve(this.modal, this.offsetG92(start), this.offsetG92(end), this.offsetG92(center));
+    }
+
     position = {
         x: 0,
         y: 0,
@@ -92,7 +112,7 @@ class Toolpath {
             };
             const targetPosition = { x: v2.x, y: v2.y, z: v2.z };
 
-            this.fn.addLine(this.modal, v1, v2);
+            this.offsetAddLine(v1, v2);
 
             // Update position
             this.setPosition(targetPosition.x, targetPosition.y, targetPosition.z);
@@ -128,7 +148,7 @@ class Toolpath {
             };
             const targetPosition = { x: v2.x, y: v2.y, z: v2.z };
 
-            this.fn.addLine(this.modal, v1, v2);
+            this.offsetAddLine(v1, v2);
 
             // Update position
             this.setPosition(targetPosition.x, targetPosition.y, targetPosition.z);
@@ -212,7 +232,7 @@ class Toolpath {
                 v0.y = v1.y + offsetY;
             }
 
-            this.fn.addArcCurve(this.modal, v1, v2, v0);
+            this.offsetAddArcCurve(v1, v2, v0);
 
             // Update position
             this.setPosition(targetPosition.x, targetPosition.y, targetPosition.z);
@@ -278,7 +298,7 @@ class Toolpath {
                 v0.y = v1.y + offsetY;
             }
 
-            this.fn.addArcCurve(this.modal, v1, v2, v0);
+            this.offsetAddArcCurve(v1, v2, v0);
 
             // Update position
             this.setPosition(targetPosition.x, targetPosition.y, targetPosition.z);
@@ -429,21 +449,44 @@ class Toolpath {
         // This would set the machine's X coordinate to 10. No physical motion will occur.
         // A G92 without coordinates will reset all axes to zero.
         'G92': (params) => {
-            const v2 = {
-                x: this.translateX(params.X, false),
-                y: this.translateY(params.Y, false),
-                z: this.translateZ(params.Z, false)
-            };
-
             // A G92 without coordinates will reset all axes to zero.
             if ((params.X === undefined) && (params.Y === undefined) && (params.Z === undefined)) {
-                v2.x = 0;
-                v2.y = 0;
-                v2.z = 0;
+                this.position.x += this.g92offset.x;
+                this.g92offset.x = 0;
+                this.position.y += this.g92offset.y;
+                this.g92offset.y = 0;
+                this.position.z += this.g92offset.z;
+                this.g92offset.z = 0;
+            } else {
+                // The calls to translateX/Y/Z() below are necessary for inch/mm conversion
+                // params.X/Y/Z must be interpreted as absolute positions, hence the "false"
+                if (params.X != undefined) {
+                    const xmm = this.translateX(params.X, false);
+                    this.g92offset.x += this.position.x - xmm;
+                    this.position.x = xmm;
+                }
+                if (params.Y != undefined) {
+                    const ymm = this.translateY(params.Y, false);
+                    this.g92offset.y += this.position.y - ymm;
+                    this.position.y = ymm;
+                }
+                if (params.Z != undefined) {
+                    const zmm = this.translateX(params.Z, false);
+                    this.g92offset.z += this.position.z - zmm;
+                    this.position.z = zmm;
+                }
             }
-
-            // Update position
-            this.setPosition(v2.x, v2.y, v2.z);
+        },
+        // G92.1: Cancel G92 offsets
+        // Parameters
+        //   none
+        'G92.1': (params) => {
+            this.position.x += this.g92offset.x;
+            this.g92offset.x = 0;
+            this.position.y += this.g92offset.y;
+            this.g92offset.y = 0;
+            this.position.z += this.g92offset.z;
+            this.g92offset.z = 0;
         },
         // G93: Inverse Time Mode
         // In inverse time feed rate mode, an F word means the move should be completed in
@@ -571,6 +614,7 @@ class Toolpath {
             addLine = noop,
             addArcCurve = noop
         } = { ...options };
+        this.g92offset.x = this.g92offset.y = this.g92offset.z = 0;
 
         // Position
         if (position) {

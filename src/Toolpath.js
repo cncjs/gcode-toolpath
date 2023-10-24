@@ -135,6 +135,9 @@ class Toolpath {
             if (this.modal.motion !== 'G1') {
                 this.setModal({ motion: 'G1' });
             }
+            if (params && params.F !== undefined) {
+                this.setModal({ feedrate: params.F });
+            }
 
             const v1 = {
                 x: this.position.x,

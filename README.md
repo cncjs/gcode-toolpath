@@ -1,4 +1,4 @@
-# gcode-toolpath [![build status](https://travis-ci.org/cncjs/gcode-toolpath.svg?branch=master)](https://travis-ci.org/cncjs/gcode-toolpath) [![Coverage Status](https://coveralls.io/repos/github/cncjs/gcode-toolpath/badge.svg?branch=master)](https://coveralls.io/github/cncjs/gcode-toolpath?branch=master)
+# gcode-toolpath [![codecov](https://codecov.io/gh/cncjs/gcode-toolpath/graph/badge.svg?token=JHJU80PHU8)](https://codecov.io/gh/cncjs/gcode-toolpath)
 
 [![NPM](https://nodei.co/npm/gcode-toolpath.png?downloads=true&stars=true)](https://www.npmjs.com/package/gcode-toolpath)
 

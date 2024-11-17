@@ -1,3 +1,3 @@
 import Toolpath from './Toolpath';
 
-module.exports = Toolpath;
+export default Toolpath;
